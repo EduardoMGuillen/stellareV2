@@ -1,0 +1,57 @@
+{% layout 'theme' %}
+
+<link rel="stylesheet" href="{{ 'bracelet-builder.css' | asset_url }}">
+<script src="{{ 'bracelet-builder.js' | asset_url }}" defer></script>
+
+<div class="bracelet-builder-page">
+  <div class="builder-header">
+    <h1>✨ Crea Tu Pulsera de Ensueño ✨</h1>
+    <p>¡Selecciona tus dijes favoritos y observa cómo tu pulsera cobra vida!</p>
+  </div>
+
+  <div class="builder-container">
+    <!-- Live Preview Section -->
+    <div class="preview-section-full">
+      <div class="preview-header">
+        <h2>Tu Pulsera Personalizada</h2>
+        <div class="preview-stats">
+          <span><strong>Pulsera:</strong> <span id="braceletName">No seleccionada</span></span>
+          <span><strong>Dijes:</strong> <span id="charmCount">0</span>/<span id="maxCharms">{{ settings.max_charms }}</span></span>
+          <span class="price-display"><strong>Total:</strong> L<span id="totalPrice">0.00</span></span>
+        </div>
+      </div>
+      
+      <div class="bracelet-preview-container">
+        <div class="bracelet-base">
+          <div class="bracelet-links-strip" id="braceletLinksStrip">
+            <!-- Empty slots will be generated here -->
+          </div>
+        </div>
+      </div>
+      
+      <div class="preview-actions-bottom">
+        <button class="btn btn-secondary" onclick="window.clearBracelet ? window.clearBracelet() : console.error('clearBracelet not defined')">🗑️ Limpiar Todo</button>
+        <button class="btn btn-primary" onclick="window.addToCart ? window.addToCart() : console.error('addToCart not defined')" id="addToCartBtn">🛒 Agregar al Carrito</button>
+      </div>
+    </div>
+
+    <!-- Charms Selection Section -->
+    <div class="charms-section-bottom">
+      <h2>Selecciona Tus Dijes</h2>
+      <p class="charms-instruction">Haz clic o arrastra los dijes a la posición deseada en tu pulsera</p>
+      
+      <div class="charms-filters">
+        <button class="filter-btn active" data-category="all">Todos los Dijes</button>
+        <button class="filter-btn" data-category="animals">Animales</button>
+        <button class="filter-btn" data-category="food">Comida</button>
+        <button class="filter-btn" data-category="love">Amor</button>
+        <button class="filter-btn" data-category="nature">Naturaleza</button>
+        <button class="filter-btn" data-category="sports">Deportes</button>
+      </div>
+
+      <div class="charms-grid" id="charmsGrid">
+        <!-- Charms will be loaded here -->
+      </div>
+    </div>
+  </div>
+</div>

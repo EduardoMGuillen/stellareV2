@@ -1,0 +1,11 @@
+{
+  "sections": {
+    "builder-content": {
+      "type": "main-page-builder"
+    }
+  },
+  "order": [
+    "builder-content"
+  ]
+}
+

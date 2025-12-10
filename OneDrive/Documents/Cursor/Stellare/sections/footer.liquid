@@ -1,0 +1,155 @@
+{% style %}
+  .site-footer {
+    background: linear-gradient(135deg, {{ settings.color_primary }} 0%, {{ settings.color_accent }} 100%);
+    color: white;
+    padding: 3rem 0 1rem;
+    margin-top: 4rem;
+  }
+
+  .footer-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  .footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .footer-section h3 {
+    color: {{ settings.color_secondary }};
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+  }
+
+  .footer-section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .footer-section li {
+    margin-bottom: 0.5rem;
+  }
+
+  .footer-section a {
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+
+  .footer-section a:hover {
+    color: {{ settings.color_secondary }};
+  }
+
+  .footer-social {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .footer-social a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transition: all 0.3s ease;
+  }
+
+  .footer-social a:hover {
+    background: {{ settings.color_secondary }};
+    transform: translateY(-3px);
+  }
+
+  .footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    padding-top: 1.5rem;
+    text-align: center;
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 768px) {
+    .footer-content {
+      grid-template-columns: 1fr;
+    }
+  }
+{% endstyle %}
+
+<footer class="site-footer">
+  <div class="footer-container">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>Acerca de Stellare</h3>
+        <p>Crea tu pulsera italiana única. Cada dije cuenta tu historia.</p>
+        <div class="footer-social">
+          <a href="https://www.instagram.com/stellare_hn/" target="_blank" rel="noopener" aria-label="Instagram">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+            </svg>
+          </a>
+          <a href="#" aria-label="Facebook">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+              <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+            </svg>
+          </a>
+          <a href="#" aria-label="TikTok">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+              <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="footer-section">
+        <h3>Enlaces Rápidos</h3>
+        <ul>
+          <li><a href="/">Inicio</a></li>
+          <li><a href="https://stellare.co/pages/builder">Crea Tu Pulsera</a></li>
+          <li><a href="/collections/all">Ver Todo</a></li>
+          <li><a href="/pages/about">Acerca de</a></li>
+          <li><a href="/pages/contact">Contacto</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-section">
+        <h3>Servicio al Cliente</h3>
+        <ul>
+          <li><a href="/pages/shipping">Información de Envío</a></li>
+          <li><a href="/pages/returns">Devoluciones</a></li>
+          <li><a href="/pages/faq">Preguntas Frecuentes</a></li>
+          <li><a href="/pages/care">Cuidado de Pulseras</a></li>
+          <li><a href="/pages/privacy">Política de Privacidad</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-section">
+        <h3>Boletín</h3>
+        <p>¡Suscríbete para nuevos diseños y ofertas exclusivas!</p>
+        {% form 'customer' %}
+          <input type="email" name="contact[email]" placeholder="Tu correo electrónico" style="padding: 0.75rem; border-radius: 25px; border: none; width: 100%; margin-top: 0.5rem;">
+          <button type="submit" style="background: {{ settings.color_secondary }}; color: {{ settings.color_primary }}; padding: 0.75rem 2rem; border: none; border-radius: 25px; font-weight: bold; margin-top: 0.5rem; cursor: pointer; width: 100%;">Suscribirse</button>
+        {% endform %}
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. All rights reserved. Made with ❤️ in Honduras.</p>
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "settings": []
+}
+{% endschema %}
+

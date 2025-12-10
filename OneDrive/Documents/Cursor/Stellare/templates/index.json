@@ -1,0 +1,26 @@
+{
+  "name": "homepage",
+  "sections": {
+    "hero-banner": {
+      "type": "hero-banner",
+      "settings": {
+        "title": "Crea la Pulsera de Tus Sueños",
+        "subtitle": "Diseña tu pulsera italiana única con nuestro constructor interactivo ⭐",
+        "button_text": "Comienza Ahora"
+      }
+    },
+    "featured-products": {
+      "type": "featured-products",
+      "settings": {
+        "heading": "Pulseras Destacadas",
+        "subheading": "Descubre nuestros diseños de pulseras más populares",
+        "products_to_show": 6
+      }
+    }
+  },
+  "order": [
+    "hero-banner",
+    "featured-products"
+  ]
+}
+

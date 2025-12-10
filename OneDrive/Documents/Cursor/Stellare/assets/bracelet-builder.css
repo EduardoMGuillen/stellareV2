@@ -1,0 +1,742 @@
+/* Bracelet Builder Page Styles */
+
+.bracelet-builder-page {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 2rem 20px;
+  animation: fadeIn 0.5s ease;
+}
+
+.builder-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.builder-header h1 {
+  font-size: 3rem;
+  color: #E91E8C;
+  margin-bottom: 0.5rem;
+  font-weight: 300;
+  letter-spacing: -1px;
+}
+
+.builder-header p {
+  font-size: 1.2rem;
+  color: #666;
+  font-weight: 300;
+}
+
+.builder-container {
+  display: block;
+}
+
+/* Charms Grid */
+.charms-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 1.5rem;
+  max-height: 70vh;
+  overflow-y: auto;
+  padding: 1rem;
+  background: #fafafa;
+  border-radius: 8px;
+}
+
+.charms-grid::-webkit-scrollbar {
+  width: 8px;
+}
+
+.charms-grid::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.charms-grid::-webkit-scrollbar-thumb {
+  background: #E91E8C;
+  border-radius: 10px;
+}
+
+.charms-grid::-webkit-scrollbar-thumb:hover {
+  background: #FF1493;
+}
+
+/* Charms Filters */
+.charms-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  justify-content: center;
+}
+
+.filter-btn {
+  padding: 0.5rem 1.5rem;
+  border: 2px solid #E91E8C;
+  background: white;
+  color: #E91E8C;
+  border-radius: 4px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.filter-btn:hover,
+.filter-btn.active {
+  background: #E91E8C;
+  color: white;
+}
+
+/* Charm Items in Grid */
+.charm-item {
+  aspect-ratio: 1;
+  background: white;
+  border: 2px solid #e8e8e8;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  cursor: grab;
+  transition: all 0.3s ease;
+  padding: 0.75rem 0.5rem 0.5rem;
+  overflow: hidden;
+}
+
+.charm-item:active {
+  cursor: grabbing;
+}
+
+.charm-item:hover {
+  transform: translateY(-5px);
+  border-color: #E91E8C;
+  box-shadow: 0 6px 20px rgba(233, 30, 140, 0.25);
+  background: #FFFBF0;
+}
+
+.charm-item.selected {
+  border-color: #FF1493;
+  background: linear-gradient(135deg, #FFE5F3 0%, #FFF8E1 100%);
+}
+
+.charm-image {
+  width: 100%;
+  height: 60%;
+  object-fit: contain;
+  margin-bottom: 0.5rem;
+}
+
+.charm-name {
+  font-size: 0.75rem;
+  text-align: center;
+  font-weight: 500;
+  line-height: 1.2;
+  color: #333;
+  margin-bottom: 0.25rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: 2.4em;
+}
+
+.charm-price {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #E91E8C;
+  text-align: center;
+  margin-top: 0.25rem;
+  white-space: nowrap;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .bracelet-builder-page {
+    padding: 1rem 10px;
+  }
+
+  .builder-header h1 {
+    font-size: 2rem;
+  }
+
+  .builder-header p {
+    font-size: 1rem;
+  }
+
+  .charms-grid {
+    grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+    gap: 1rem;
+    padding: 0.5rem;
+  }
+
+  .charm-item {
+    padding: 0.5rem 0.25rem 0.25rem;
+  }
+
+  .charm-name {
+    font-size: 0.7rem;
+  }
+
+  .charm-price {
+    font-size: 0.75rem;
+  }
+
+  .bracelet-links-strip {
+    padding: 6px;
+  }
+
+  .link-slot {
+    width: 40px;
+    height: 40px;
+  }
+
+  .preview-stats {
+    flex-direction: column;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+  }
+
+  .preview-actions-bottom {
+    flex-direction: column;
+  }
+
+  .preview-actions-bottom button {
+    width: 100%;
+  }
+
+  .filter-btn {
+    padding: 0.4rem 1rem;
+    font-size: 0.8rem;
+  }
+}
+
+/* Additional Styles */
+
+/* Full Width Preview Section */
+.preview-section-full {
+  background: linear-gradient(135deg, rgba(233, 30, 140, 0.05) 0%, rgba(255, 215, 0, 0.05) 100%);
+  padding: 2rem;
+  border-radius: 20px;
+  margin-bottom: 2rem;
+}
+
+.preview-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.preview-header h2 {
+  color: #E91E8C;
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.preview-stats {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+  font-size: 1rem;
+}
+
+.preview-stats span {
+  color: #333;
+}
+
+.preview-stats .price-display {
+  color: #E91E8C;
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+/* Bracelet Preview Container */
+.bracelet-preview-container {
+  background: white;
+  border-radius: 15px;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(233, 30, 140, 0.1);
+  overflow-x: auto;
+  margin-bottom: 1.5rem;
+}
+
+.bracelet-base {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100px;
+}
+
+.bracelet-links-strip {
+  display: flex;
+  gap: 3px;
+  background: linear-gradient(180deg, #E8E8E8 0%, #C0C0C0 50%, #A0A0A0 100%);
+  padding: 8px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  position: relative;
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.bracelet-links-strip::before,
+.bracelet-links-strip::after {
+  content: '';
+  width: 20px;
+  height: 100%;
+  background: linear-gradient(180deg, #A0A0A0 0%, #808080 100%);
+  border-radius: 5px;
+  flex-shrink: 0;
+}
+
+/* Individual Link Slot */
+.link-slot {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, #F5F5F5 0%, #E0E0E0 100%);
+  border: 2px dashed #999;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+  position: relative;
+  cursor: pointer;
+}
+
+.link-slot.empty {
+  opacity: 0.5;
+}
+
+.link-slot.empty:hover {
+  opacity: 0.8;
+  border-color: #E91E8C;
+  background: linear-gradient(135deg, #FFF5F9 0%, #FFFBF0 100%);
+}
+
+.link-slot.filled {
+  background: linear-gradient(135deg, #FFE5F3 0%, #FFF8E1 100%);
+  border: 2px solid #E91E8C;
+  opacity: 1;
+  cursor: move;
+}
+
+.link-slot.filled:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 10px rgba(233, 30, 140, 0.3);
+}
+
+.link-slot img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 3px;
+  padding: 2px;
+}
+
+.link-slot:hover .remove-charm-btn {
+  opacity: 1;
+}
+
+.remove-charm-btn {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: #E91E8C;
+  color: white;
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 10;
+  border: 2px solid white;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
+
+.remove-charm-btn:hover {
+  background: #FF1493;
+  transform: scale(1.1);
+}
+
+/* Bottom Actions */
+.preview-actions-bottom {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.preview-actions-bottom button {
+  padding: 1rem 3rem;
+  font-size: 1.1rem;
+}
+
+/* Charms Section Below */
+.charms-section-bottom {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  margin-top: 2rem;
+}
+
+.charms-section-bottom h2 {
+  color: #E91E8C;
+  margin-bottom: 0.5rem;
+  text-align: center;
+  font-weight: 300;
+  font-size: 2rem;
+}
+
+.charms-instruction {
+  text-align: center;
+  color: #666;
+  margin-bottom: 2rem;
+  font-size: 1rem;
+  font-weight: 300;
+}
+
+/* Draggable charm items */
+.charm-item[draggable="true"] {
+  cursor: grab;
+  user-select: none;
+}
+
+.charm-item[draggable="true"]:active {
+  cursor: grabbing;
+  opacity: 0.7;
+}
+
+.charm-item[draggable="true"]:hover {
+  transform: scale(1.05) translateY(-5px);
+  box-shadow: 0 8px 25px rgba(233, 30, 140, 0.3);
+}
+
+/* Drag placeholder */
+.charm-item.dragging {
+  opacity: 0.5;
+  transform: scale(0.95);
+}
+
+/* Bracelet Selection Modal */
+.bracelet-selection-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.3s ease;
+}
+
+.bracelet-selection-modal {
+  background: white;
+  border-radius: 20px;
+  padding: 3rem;
+  max-width: 1000px;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: slideInUp 0.4s ease;
+}
+
+.bracelet-selection-modal h2 {
+  color: #E91E8C;
+  text-align: center;
+  margin-bottom: 1rem;
+  font-size: 2rem;
+}
+
+.bracelet-selection-modal > p {
+  text-align: center;
+  color: #666;
+  margin-bottom: 2rem;
+}
+
+.bracelets-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 2rem;
+}
+
+.bracelet-option {
+  background: linear-gradient(135deg, #FFE5F3 0%, #FFF8E1 100%);
+  border-radius: 15px;
+  padding: 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 3px solid transparent;
+}
+
+.bracelet-option:hover {
+  transform: translateY(-5px);
+  border-color: #E91E8C;
+  box-shadow: 0 8px 25px rgba(233, 30, 140, 0.3);
+}
+
+.bracelet-image {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+  background: white;
+}
+
+.bracelet-option h3 {
+  color: #E91E8C;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.bracelet-price {
+  color: #FF1493;
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+/* Charm images in grid */
+.charm-item {
+  aspect-ratio: 1;
+  background: linear-gradient(135deg, #FFE5F3 0%, #FFF8E1 100%);
+  border: 3px solid transparent;
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0.5rem;
+  overflow: hidden;
+}
+
+.charm-item:hover {
+  transform: scale(1.05);
+  border-color: #E91E8C;
+  box-shadow: 0 4px 15px rgba(233, 30, 140, 0.3);
+}
+
+.charm-item.selected {
+  border-color: #FF1493;
+  background: linear-gradient(135deg, #FF1493 0%, #E91E8C 100%);
+  color: white;
+}
+
+.charm-image {
+  width: 80%;
+  height: 80%;
+  object-fit: contain;
+  margin-bottom: 0.5rem;
+}
+
+.charm-name {
+  font-size: 0.7rem;
+  text-align: center;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.charm-price {
+  font-size: 0.65rem;
+  font-weight: bold;
+  color: #E91E8C;
+  margin-top: 0.25rem;
+}
+
+/* Charm links in preview with images */
+.charm-link-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 3px;
+}
+
+.charm-link {
+  width: 45px;
+  height: 45px;
+  background: linear-gradient(135deg, #C0C0C0 0%, #E8E8E8 50%, #A0A0A0 100%);
+  border: 2px solid #888;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  padding: 2px;
+}
+
+/* Charm animation on add */
+@keyframes charmPop {
+  0% {
+    transform: scale(0) rotate(0deg);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2) rotate(10deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+.charm-link {
+  animation: charmPop 0.4s ease;
+}
+
+/* Loading spinner */
+.spinner {
+  border: 4px solid rgba(233, 30, 140, 0.1);
+  border-top: 4px solid #E91E8C;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Hover effects for charms */
+.charm-item {
+  position: relative;
+  overflow: hidden;
+}
+
+.charm-item::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(233, 30, 140, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.charm-item:hover::before {
+  width: 200%;
+  height: 200%;
+}
+
+/* Scrollbar for charms grid */
+.charms-grid::-webkit-scrollbar {
+  width: 8px;
+}
+
+.charms-grid::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.charms-grid::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #E91E8C 0%, #FF1493 100%);
+  border-radius: 10px;
+}
+
+.charms-grid::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #FF1493 0%, #E91E8C 100%);
+}
+
+/* Bracelet preview glow effect */
+.bracelet-preview {
+  position: relative;
+}
+
+.bracelet-preview::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 15px;
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.bracelet-preview:hover::after {
+  opacity: 1;
+}
+
+/* Button loading state */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .builder-header h1 {
+    font-size: 1.8rem;
+  }
+
+  .builder-header p {
+    font-size: 1rem;
+  }
+
+  .preview-section {
+    padding: 1.5rem;
+  }
+
+  .charms-section {
+    padding: 1.5rem;
+  }
+
+  .charms-filters {
+    justify-content: center;
+  }
+
+  .filter-btn {
+    padding: 0.4rem 1rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* Print styles (for saving bracelet design) */
+@media print {
+  .charms-section,
+  .preview-actions,
+  header,
+  footer {
+    display: none;
+  }
+
+  .builder-container {
+    grid-template-columns: 1fr;
+  }
+
+  .preview-section {
+    box-shadow: none;
+  }
+}
+

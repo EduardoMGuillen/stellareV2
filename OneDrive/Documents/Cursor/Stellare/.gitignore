@@ -1,0 +1,26 @@
+# Shopify Theme Files to Ignore
+
+# Archive files
+*.zip
+
+# Preview files
+THEME_PREVIEW.html
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+npm-debug.log*
+
+# Temporary files
+tmp/
+temp/

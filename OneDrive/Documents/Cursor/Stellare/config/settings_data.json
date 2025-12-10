@@ -1,0 +1,29 @@
+{
+  "current": {
+    "color_primary": "#E91E8C",
+    "color_secondary": "#FFD700",
+    "color_accent": "#FF1493",
+    "color_text": "#2c2c2c",
+    "color_text_light": "#666666",
+    "color_background": "#FFFFFF",
+    "color_light_gray": "#f8f8f8",
+    "max_charms": 18,
+    "show_empty_slots": true,
+    "base_font_size": 16,
+    "products_per_row_desktop": 4,
+    "products_per_row_mobile": 2,
+    "show_vendor": false,
+    "show_quick_view": false,
+    "cart_type": "page",
+    "enable_cart_notes": true,
+    "show_announcement": false,
+    "announcement_text": "<p>Envío gratis en compras mayores a L1,000</p>",
+    "announcement_bg_color": "#E91E8C",
+    "announcement_text_color": "#FFFFFF",
+    "social_instagram": "https://www.instagram.com/stellare_hn/",
+    "social_facebook": "",
+    "social_tiktok": "",
+    "social_whatsapp": ""
+  }
+}
+

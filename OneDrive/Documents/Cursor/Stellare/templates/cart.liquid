@@ -1,0 +1,167 @@
+{% style %}
+  .cart-page {
+    max-width: 1200px;
+    margin: 3rem auto;
+    padding: 0 20px;
+  }
+
+  .cart-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .cart-title {
+    font-size: 3rem;
+    color: {{ settings.color_primary }};
+    font-weight: 800;
+  }
+
+  .cart-empty {
+    text-align: center;
+    padding: 4rem 2rem;
+  }
+
+  .cart-empty-icon {
+    font-size: 5rem;
+    margin-bottom: 1rem;
+  }
+
+  .cart-items {
+    margin-bottom: 3rem;
+  }
+
+  .cart-item {
+    display: grid;
+    grid-template-columns: 120px 1fr auto;
+    gap: 2rem;
+    padding: 2rem;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    margin-bottom: 1rem;
+  }
+
+  .cart-item-image {
+    width: 120px;
+    height: 120px;
+    border-radius: 10px;
+    object-fit: cover;
+    background: linear-gradient(135deg, #FFE5F3 0%, #FFF8E1 100%);
+  }
+
+  .cart-item-details h3 {
+    color: {{ settings.color_primary }};
+    margin-bottom: 0.5rem;
+  }
+
+  .cart-item-price {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: {{ settings.color_accent }};
+  }
+
+  .cart-summary {
+    background: linear-gradient(135deg, {{ settings.color_primary }} 0%, {{ settings.color_accent }} 100%);
+    padding: 2rem;
+    border-radius: 15px;
+    color: white;
+    max-width: 400px;
+    margin: 0 0 0 auto;
+  }
+
+  .cart-summary h3 {
+    color: {{ settings.color_secondary }};
+    margin-bottom: 1rem;
+  }
+
+  .cart-total {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 1.5rem 0;
+    padding-top: 1rem;
+    border-top: 2px solid rgba(255, 255, 255, 0.3);
+  }
+
+  .checkout-btn {
+    width: 100%;
+    padding: 1.25rem;
+    background: {{ settings.color_secondary }};
+    color: {{ settings.color_primary }};
+    border: none;
+    border-radius: 50px;
+    font-weight: bold;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .checkout-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  }
+
+  @media (max-width: 768px) {
+    .cart-item {
+      grid-template-columns: 80px 1fr;
+      gap: 1rem;
+    }
+
+    .cart-item-image {
+      width: 80px;
+      height: 80px;
+    }
+
+    .cart-summary {
+      max-width: 100%;
+    }
+  }
+{% endstyle %}
+
+<div class="cart-page">
+  <div class="cart-header">
+    <h1 class="cart-title">🛒 Tu Carrito</h1>
+  </div>
+
+  {% if cart.item_count == 0 %}
+    <div class="cart-empty">
+      <div class="cart-empty-icon">🛍️</div>
+      <h2>Tu carrito está vacío</h2>
+      <p>¡Comienza a crear la pulsera de tus sueños!</p>
+      <a href="https://stellare.co/pages/builder" class="btn btn-primary" style="margin-top: 2rem; display: inline-block;">Crea Tu Pulsera</a>
+    </div>
+  {% else %}
+    <div class="cart-items">
+      {% for item in cart.items %}
+        <div class="cart-item">
+          <img src="{{ item.image | img_url: '200x' }}" alt="{{ item.title }}" class="cart-item-image">
+          <div class="cart-item-details">
+            <h3>{{ item.title }}</h3>
+            <p>Cantidad: {{ item.quantity }}</p>
+            {% if item.properties %}
+              {% for property in item.properties %}
+                <p><strong>{{ property.first }}:</strong> {{ property.last }}</p>
+              {% endfor %}
+            {% endif %}
+          </div>
+          <div class="cart-item-price">
+            L {{ item.line_price | money_without_currency }}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+
+    <div class="cart-summary">
+      <h3>Resumen del Pedido</h3>
+          <div class="cart-total">
+        <span>Total:</span>
+        <span>L {{ cart.total_price | money_without_currency }}</span>
+      </div>
+      <button type="button" onclick="window.location.href='/checkout'" class="checkout-btn">
+        Proceder al Pago ✨
+      </button>
+    </div>
+  {% endif %}
+</div>
+

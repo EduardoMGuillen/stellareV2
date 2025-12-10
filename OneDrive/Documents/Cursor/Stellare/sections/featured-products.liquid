@@ -1,0 +1,176 @@
+{% style %}
+  .featured-products {
+    max-width: 1400px;
+    margin: 4rem auto;
+    padding: 0 20px;
+  }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+
+  .section-title {
+    font-size: 2.5rem;
+    color: {{ settings.color_primary }};
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+  }
+
+  .section-subtitle {
+    font-size: 1.2rem;
+    color: {{ settings.color_text }};
+  }
+
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 1rem;
+  }
+
+  .product-card {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(233, 30, 140, 0.1);
+    transition: all 0.3s ease;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+
+  .product-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 25px rgba(233, 30, 140, 0.2);
+  }
+
+  .product-image {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+    background: linear-gradient(135deg, #FFE5F3 0%, #FFF8E1 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+  }
+
+  .product-info {
+    padding: 0.75rem;
+  }
+
+  .product-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: {{ settings.color_text }};
+    margin-bottom: 0.25rem;
+    line-height: 1.2;
+  }
+
+  .product-price {
+    font-size: 1rem;
+    font-weight: bold;
+    color: {{ settings.color_primary }};
+  }
+
+  .view-all-btn {
+    display: block;
+    text-align: center;
+    margin: 3rem auto 0;
+    padding: 1rem 3rem;
+    background: {{ settings.color_primary }};
+    color: white;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: bold;
+    width: fit-content;
+    transition: all 0.3s ease;
+  }
+
+  .view-all-btn:hover {
+    background: {{ settings.color_accent }};
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(233, 30, 140, 0.3);
+  }
+{% endstyle %}
+
+<section class="featured-products">
+  <div class="section-header">
+    <h2 class="section-title">{{ section.settings.heading }}</h2>
+    <p class="section-subtitle">{{ section.settings.subheading }}</p>
+  </div>
+
+  <div class="products-grid">
+    {% if section.settings.collection != blank %}
+      {% assign collection = collections[section.settings.collection] %}
+      {% for product in collection.products limit: section.settings.products_to_show %}
+        <a href="{{ product.url }}" class="product-card">
+          <div class="product-image">
+            {% if product.featured_image %}
+              <img src="{{ product.featured_image | img_url: '400x' }}" alt="{{ product.title }}" style="width: 100%; height: 100%; object-fit: cover;">
+            {% else %}
+              💎
+            {% endif %}
+          </div>
+          <div class="product-info">
+            <h3 class="product-title">{{ product.title }}</h3>
+            <p class="product-price">L {{ product.price | money_without_currency }}</p>
+          </div>
+        </a>
+      {% endfor %}
+    {% else %}
+      {% comment %} Placeholder products {% endcomment %}
+      {% for i in (1..6) %}
+        <div class="product-card">
+          <div class="product-image">✨</div>
+          <div class="product-info">
+            <h3 class="product-title">Custom Charm Bracelet {{ i }}</h3>
+            <p class="product-price">$29.99</p>
+          </div>
+        </div>
+      {% endfor %}
+    {% endif %}
+  </div>
+
+  <a href="/collections/all" class="view-all-btn">Ver Todos los Productos</a>
+</section>
+
+{% schema %}
+{
+  "name": "Featured Products",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Encabezado",
+      "default": "Pulseras Destacadas"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subtítulo",
+      "default": "Descubre nuestros diseños de pulseras más populares"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 3,
+      "max": 12,
+      "step": 1,
+      "label": "Number of products to show",
+      "default": 6
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured Products"
+    }
+  ]
+}
+{% endschema %}
+

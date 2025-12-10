@@ -1,0 +1,299 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Stellare",
+    "theme_version": "2.0.0",
+    "theme_author": "Stellare Shop Honduras",
+    "theme_documentation_url": "",
+    "theme_support_url": ""
+  },
+  {
+    "name": "Colores",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Colores de Marca"
+      },
+      {
+        "type": "paragraph",
+        "content": "Personaliza los colores de tu tienda. Los cambios se aplicarán en todo el sitio."
+      },
+      {
+        "type": "color",
+        "id": "color_primary",
+        "label": "Color Primario (Rosa)",
+        "default": "#E91E8C",
+        "info": "Color principal para botones y acentos"
+      },
+      {
+        "type": "color",
+        "id": "color_secondary",
+        "label": "Color Secundario (Dorado)",
+        "default": "#FFD700",
+        "info": "Color para elementos destacados"
+      },
+      {
+        "type": "color",
+        "id": "color_accent",
+        "label": "Color de Acento",
+        "default": "#FF1493",
+        "info": "Color para efectos hover y énfasis"
+      },
+      {
+        "type": "color",
+        "id": "color_text",
+        "label": "Color de Texto",
+        "default": "#2c2c2c",
+        "info": "Color del texto principal"
+      },
+      {
+        "type": "color",
+        "id": "color_text_light",
+        "label": "Color de Texto Claro",
+        "default": "#666666",
+        "info": "Color para texto secundario"
+      },
+      {
+        "type": "color",
+        "id": "color_background",
+        "label": "Color de Fondo",
+        "default": "#FFFFFF",
+        "info": "Color de fondo principal del sitio"
+      },
+      {
+        "type": "color",
+        "id": "color_light_gray",
+        "label": "Color Gris Claro",
+        "default": "#f8f8f8",
+        "info": "Color para secciones de fondo"
+      }
+    ]
+  },
+  {
+    "name": "Tipografía",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Configuración de Fuentes"
+      },
+      {
+        "type": "paragraph",
+        "content": "Selecciona las fuentes para tu tienda. Diseño minimalista recomienda fuentes sans-serif ligeras."
+      },
+      {
+        "type": "font_picker",
+        "id": "font_heading",
+        "label": "Fuente de Títulos",
+        "default": "assistant_n3",
+        "info": "Fuente para encabezados (h1, h2, h3)"
+      },
+      {
+        "type": "font_picker",
+        "id": "font_body",
+        "label": "Fuente del Cuerpo",
+        "default": "assistant_n4",
+        "info": "Fuente para texto del cuerpo"
+      },
+      {
+        "type": "range",
+        "id": "base_font_size",
+        "min": 14,
+        "max": 18,
+        "step": 1,
+        "unit": "px",
+        "label": "Tamaño Base de Fuente",
+        "default": 16
+      }
+    ]
+  },
+  {
+    "name": "Constructor de Pulseras",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Configuración del Constructor"
+      },
+      {
+        "type": "paragraph",
+        "content": "Ajusta el comportamiento del constructor de pulseras personalizado."
+      },
+      {
+        "type": "range",
+        "id": "max_charms",
+        "min": 10,
+        "max": 30,
+        "step": 1,
+        "label": "Máximo de Dijes por Pulsera",
+        "default": 18,
+        "info": "Número máximo de dijes que puede tener una pulsera"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_empty_slots",
+        "label": "Mostrar Slots Vacíos",
+        "default": true,
+        "info": "Muestra los espacios vacíos en la vista previa"
+      }
+    ]
+  },
+  {
+    "name": "Redes Sociales",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Enlaces de Redes Sociales"
+      },
+      {
+        "type": "paragraph",
+        "content": "Agrega tus perfiles de redes sociales. Aparecerán en el footer."
+      },
+      {
+        "type": "text",
+        "id": "social_instagram",
+        "label": "Instagram",
+        "placeholder": "https://www.instagram.com/stellare_hn/",
+        "info": "URL completa de tu perfil de Instagram"
+      },
+      {
+        "type": "text",
+        "id": "social_facebook",
+        "label": "Facebook",
+        "placeholder": "https://www.facebook.com/...",
+        "info": "URL completa de tu página de Facebook"
+      },
+      {
+        "type": "text",
+        "id": "social_tiktok",
+        "label": "TikTok",
+        "placeholder": "https://www.tiktok.com/@...",
+        "info": "URL completa de tu perfil de TikTok"
+      },
+      {
+        "type": "text",
+        "id": "social_whatsapp",
+        "label": "WhatsApp",
+        "placeholder": "+504 XXXX-XXXX",
+        "info": "Número de WhatsApp con código de país"
+      }
+    ]
+  },
+  {
+    "name": "Configuración de Productos",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Opciones de Visualización"
+      },
+      {
+        "type": "range",
+        "id": "products_per_row_desktop",
+        "min": 3,
+        "max": 6,
+        "step": 1,
+        "label": "Productos por Fila (Escritorio)",
+        "default": 4,
+        "info": "Número de productos mostrados por fila en pantallas grandes"
+      },
+      {
+        "type": "range",
+        "id": "products_per_row_mobile",
+        "min": 2,
+        "max": 3,
+        "step": 1,
+        "label": "Productos por Fila (Móvil)",
+        "default": 2,
+        "info": "Número de productos mostrados por fila en móviles"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_vendor",
+        "label": "Mostrar Proveedor",
+        "default": false,
+        "info": "Muestra el nombre del proveedor en las tarjetas de producto"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_quick_view",
+        "label": "Vista Rápida de Productos",
+        "default": false,
+        "info": "Permite ver detalles del producto sin salir de la página"
+      }
+    ]
+  },
+  {
+    "name": "Carrito y Checkout",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Opciones del Carrito"
+      },
+      {
+        "type": "select",
+        "id": "cart_type",
+        "label": "Tipo de Carrito",
+        "options": [
+          {
+            "value": "page",
+            "label": "Página Completa"
+          },
+          {
+            "value": "drawer",
+            "label": "Cajón Lateral"
+          }
+        ],
+        "default": "page",
+        "info": "Cómo se muestra el carrito cuando se agregan productos"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_cart_notes",
+        "label": "Notas del Pedido",
+        "default": true,
+        "info": "Permite a los clientes agregar notas a su pedido"
+      },
+      {
+        "type": "text",
+        "id": "free_shipping_threshold",
+        "label": "Umbral de Envío Gratis",
+        "placeholder": "1000",
+        "info": "Monto mínimo para envío gratis (en Lempiras, sin L)"
+      }
+    ]
+  },
+  {
+    "name": "Anuncios",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Barra de Anuncios"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_announcement",
+        "label": "Mostrar Barra de Anuncios",
+        "default": false,
+        "info": "Muestra una barra de anuncios en la parte superior"
+      },
+      {
+        "type": "richtext",
+        "id": "announcement_text",
+        "label": "Texto del Anuncio",
+        "default": "<p>Envío gratis en compras mayores a L1,000</p>",
+        "info": "Mensaje a mostrar en la barra de anuncios"
+      },
+      {
+        "type": "color",
+        "id": "announcement_bg_color",
+        "label": "Color de Fondo",
+        "default": "#E91E8C"
+      },
+      {
+        "type": "color",
+        "id": "announcement_text_color",
+        "label": "Color de Texto",
+        "default": "#FFFFFF"
+      }
+    ]
+  }
+]
+

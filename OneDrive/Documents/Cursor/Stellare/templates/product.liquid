@@ -1,0 +1,315 @@
+{% style %}
+  .product-page {
+    max-width: 1400px;
+    margin: 2rem auto;
+    padding: 0 20px;
+  }
+
+  .product-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    margin-bottom: 4rem;
+  }
+
+  .product-images {
+    position: sticky;
+    top: 100px;
+    height: fit-content;
+  }
+
+  .product-image-main {
+    width: 100%;
+    max-width: 400px;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    background: linear-gradient(135deg, #FFE5F3 0%, #FFF8E1 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+    margin: 0 auto;
+  }
+
+  .product-info {
+    padding-top: 1rem;
+  }
+
+  .product-title {
+    font-size: 2rem;
+    color: {{ settings.color_primary }};
+    margin-bottom: 0.75rem;
+  }
+
+  .product-price {
+    font-size: 1.75rem;
+    color: {{ settings.color_accent }};
+    font-weight: bold;
+    margin-bottom: 1.25rem;
+  }
+
+  .product-description {
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    color: {{ settings.color_text }};
+  }
+
+  .product-form {
+    margin-bottom: 2rem;
+  }
+
+  .quantity-selector {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .quantity-input {
+    display: flex;
+    align-items: center;
+    border: 2px solid {{ settings.color_primary }};
+    border-radius: 50px;
+    overflow: hidden;
+  }
+
+  .quantity-btn {
+    background: {{ settings.color_primary }};
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+
+  .quantity-btn:hover {
+    background: {{ settings.color_accent }};
+  }
+
+  .quantity-value {
+    padding: 0 2rem;
+    font-weight: bold;
+    font-size: 1.2rem;
+  }
+
+  .add-to-cart-btn {
+    width: 100%;
+    padding: 1.25rem;
+    font-size: 1.3rem;
+    background: {{ settings.color_primary }};
+    color: white;
+    border: none;
+    border-radius: 50px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(233, 30, 140, 0.3);
+  }
+
+  .add-to-cart-btn:hover {
+    background: {{ settings.color_accent }};
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(233, 30, 140, 0.4);
+  }
+
+  @media (max-width: 968px) {
+    .product-container {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    .product-images {
+      position: relative;
+      top: 0;
+    }
+
+    .product-image-main {
+      max-width: 300px;
+      font-size: 3rem;
+    }
+
+    .product-title {
+      font-size: 1.5rem;
+    }
+
+    .product-price {
+      font-size: 1.5rem;
+    }
+
+    .product-description {
+      font-size: 0.95rem;
+    }
+  }
+{% endstyle %}
+
+<div class="product-page">
+  <div class="product-container">
+    <div class="product-images">
+      <div class="product-image-main">
+        {% if product.featured_image %}
+          <img src="{{ product.featured_image | img_url: '800x' }}" alt="{{ product.title }}">
+        {% else %}
+          💎
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="product-info">
+      <h1 class="product-title">{{ product.title }}</h1>
+      <div class="product-price">L {{ product.price | money_without_currency }}</div>
+      
+      <div class="product-description">
+        {{ product.description }}
+      </div>
+
+      {% form 'product', product, id: 'add-to-cart-form' %}
+        <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+        
+        <div class="product-form">
+          <div class="quantity-selector">
+            <label for="quantity"><strong>Cantidad:</strong></label>
+            <div class="quantity-input">
+              <button type="button" class="quantity-btn" onclick="changeQuantity(-1)">−</button>
+              <input type="number" id="quantity" name="quantity" value="1" min="1" class="quantity-value" readonly>
+              <button type="button" class="quantity-btn" onclick="changeQuantity(1)">+</button>
+            </div>
+          </div>
+
+          <button type="submit" class="add-to-cart-btn" id="add-to-cart-button">
+            🛒 Agregar al Carrito
+          </button>
+        </div>
+      {% endform %}
+
+      <div class="product-features">
+        <p>✨ <strong>Calidad Artesanal</strong></p>
+        <p>🚚 <strong>Envío Rápido</strong></p>
+        <p>💝 <strong>Regalo Perfecto</strong></p>
+        <p>🔒 <strong>Pago Seguro</strong></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function changeQuantity(delta) {
+    const quantityInput = document.getElementById('quantity');
+    let currentValue = parseInt(quantityInput.value);
+    let newValue = currentValue + delta;
+    if (newValue >= 1) {
+      quantityInput.value = newValue;
+    }
+  }
+
+  // Handle add to cart form submission
+  document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('add-to-cart-form');
+    const button = document.getElementById('add-to-cart-button');
+    
+    if (form) {
+      form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        console.log('🛒 Product add to cart form submitted');
+        
+        const formData = new FormData(form);
+        const variantId = formData.get('id');
+        const quantity = parseInt(formData.get('quantity'));
+        
+        console.log('Adding product:', { variantId, quantity });
+        
+        // Disable button
+        const originalText = button.innerHTML;
+        button.innerHTML = '⏳ Agregando...';
+        button.disabled = true;
+        
+        try {
+          const response = await fetch('/cart/add.js', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              id: variantId,
+              quantity: quantity
+            })
+          });
+          
+          console.log('Response status:', response.status);
+          
+          if (!response.ok) {
+            const errorText = await response.text();
+            console.error('Cart API error:', errorText);
+            throw new Error('No se pudo agregar al carrito');
+          }
+          
+          const result = await response.json();
+          console.log('Cart API result:', result);
+          
+          // Show success message
+          showToast('✅ ¡Producto agregado al carrito!');
+          
+          // Update cart count if function exists
+          if (window.updateCartCount) {
+            window.updateCartCount();
+          }
+          
+          // Redirect to cart after short delay
+          setTimeout(() => {
+            window.location.href = '/cart';
+          }, 1000);
+          
+        } catch (error) {
+          console.error('Error adding to cart:', error);
+          showToast('❌ Error al agregar al carrito', 'error');
+          button.innerHTML = originalText;
+          button.disabled = false;
+        }
+      });
+    }
+  });
+  
+  // Toast notification function
+  function showToast(message, type = 'success') {
+    const toast = document.createElement('div');
+    toast.style.cssText = `
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: ${type === 'success' ? '#E91E8C' : '#dc3545'};
+      color: white;
+      padding: 1rem 2rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      z-index: 9999;
+      font-weight: 600;
+      animation: slideIn 0.3s ease;
+    `;
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+      toast.style.animation = 'slideOut 0.3s ease';
+      setTimeout(() => toast.remove(), 300);
+    }, 3000);
+  }
+  
+  // Add animation styles
+  const style = document.createElement('style');
+  style.textContent = `
+    @keyframes slideIn {
+      from { transform: translateX(400px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    @keyframes slideOut {
+      from { transform: translateX(0); opacity: 1; }
+      to { transform: translateX(400px); opacity: 0; }
+    }
+  `;
+  document.head.appendChild(style);
+</script>
+
