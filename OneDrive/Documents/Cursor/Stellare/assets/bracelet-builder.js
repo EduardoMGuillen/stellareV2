@@ -3,11 +3,11 @@
 
 class BraceletBuilder {
   constructor() {
-    this.selectedCharms = [];
+    this.maxCharms = 18;
+    this.selectedCharms = new Array(this.maxCharms).fill(null); // Fixed size array with positions
     this.selectedBracelet = null;
     this.charms = []; // Products from "Colgantes y dijes" collection
     this.bracelets = []; // Products from "Pulseras" collection
-    this.maxCharms = 18;
     this.currentFilter = 'all';
     this.isLoading = true;
     
@@ -19,6 +19,7 @@ class BraceletBuilder {
     const maxCharmsElement = document.getElementById('maxCharms');
     if (maxCharmsElement) {
       this.maxCharms = parseInt(maxCharmsElement.textContent) || 18;
+      this.selectedCharms = new Array(this.maxCharms).fill(null); // Reinitialize with correct size
     }
 
     // Show loading state
@@ -277,33 +278,39 @@ class BraceletBuilder {
       return;
     }
 
-    if (this.selectedCharms.length >= this.maxCharms) {
+    // Find first empty slot
+    const firstEmptyIndex = this.selectedCharms.findIndex(slot => slot === null);
+    if (firstEmptyIndex === -1) {
       this.showToast('¡Máximo de dijes alcanzado!', 'error');
       return;
     }
 
     const charm = this.charms.find(c => c.id === charmId);
     if (charm) {
-      this.selectedCharms.push({
+      this.selectedCharms[firstEmptyIndex] = {
         ...charm,
         uniqueId: Date.now() + Math.random() // Unique ID for removal
-      });
+      };
       this.updatePreview();
-      this.showToast(`¡${charm.title} agregado!`, 'success');
+      this.showToast(`¡${charm.title} agregado en posición ${firstEmptyIndex + 1}!`, 'success');
     }
   }
 
   removeCharm(uniqueId) {
-    this.selectedCharms = this.selectedCharms.filter(c => c.uniqueId !== uniqueId);
-    this.updatePreview();
-    this.showToast('Dije removido', 'success');
+    const index = this.selectedCharms.findIndex(c => c && c.uniqueId === uniqueId);
+    if (index !== -1) {
+      this.selectedCharms[index] = null;
+      this.updatePreview();
+      this.showToast('Dije removido', 'success');
+    }
   }
 
   clearBracelet() {
-    if (this.selectedCharms.length === 0) return;
+    const hasCharms = this.selectedCharms.some(slot => slot !== null);
+    if (!hasCharms) return;
     
     if (confirm('¿Estás seguro que deseas eliminar todos los dijes?')) {
-      this.selectedCharms = [];
+      this.selectedCharms = new Array(this.maxCharms).fill(null);
       this.updatePreview();
       this.showToast('Pulsera limpiada', 'success');
     }
@@ -316,59 +323,62 @@ class BraceletBuilder {
 
     if (!braceletStrip) return;
 
-    // Calculate total price (bracelet + charms)
+    // Calculate total price (bracelet + non-null charms)
     const braceletPrice = this.selectedBracelet ? this.selectedBracelet.price : 0;
-    const charmsTotal = this.selectedCharms.reduce((sum, charm) => sum + charm.price, 0);
+    const charmsTotal = this.selectedCharms
+      .filter(charm => charm !== null)
+      .reduce((sum, charm) => sum + charm.price, 0);
     const total = braceletPrice + charmsTotal;
     
+    // Count non-null charms
+    const activeCharms = this.selectedCharms.filter(charm => charm !== null).length;
+    
     if (totalPrice) totalPrice.textContent = total.toFixed(2);
-    if (charmCount) charmCount.textContent = this.selectedCharms.length;
+    if (charmCount) charmCount.textContent = activeCharms;
 
-    // Render bracelet strip with slots
+    // Render ALL slots (filled and empty) in their fixed positions
     let html = '';
     
-    // Add filled slots with charms
     this.selectedCharms.forEach((charm, index) => {
-      html += `
-        <div class="link-slot filled" title="${charm.title}" data-index="${index}"
-             ondragover="builder.handleDragOver(event)"
-             ondrop="builder.handleDrop(event, ${index})"
-             ondragleave="builder.handleDragLeave(event)"
-             draggable="true"
-             ondragstart="builder.handleCharmDragStart(event, ${index})">
-          <img src="${charm.image}" alt="${charm.title}">
-          <span class="remove-charm-btn" onclick="event.stopPropagation(); builder.removeCharmAtIndex(${index})">×</span>
-        </div>
-      `;
+      if (charm !== null) {
+        // Filled slot
+        html += `
+          <div class="link-slot filled" title="${charm.title}" data-index="${index}"
+               ondragover="builder.handleDragOver(event)"
+               ondrop="builder.handleDrop(event, ${index})"
+               ondragleave="builder.handleDragLeave(event)"
+               draggable="true"
+               ondragstart="builder.handleCharmDragStart(event, ${index})">
+            <img src="${charm.image}" alt="${charm.title}">
+            <span class="remove-charm-btn" onclick="event.stopPropagation(); builder.removeCharmAtIndex(${index})">×</span>
+          </div>
+        `;
+      } else {
+        // Empty slot
+        html += `
+          <div class="link-slot empty" data-index="${index}"
+               ondragover="builder.handleDragOver(event)"
+               ondrop="builder.handleDrop(event, ${index})"
+               ondragleave="builder.handleDragLeave(event)"></div>
+        `;
+      }
     });
-
-    // Add empty slots for remaining space
-    const emptySlots = this.maxCharms - this.selectedCharms.length;
-    for (let i = 0; i < emptySlots; i++) {
-      const slotIndex = this.selectedCharms.length + i;
-      html += `
-        <div class="link-slot empty" data-index="${slotIndex}"
-             ondragover="builder.handleDragOver(event)"
-             ondrop="builder.handleDrop(event, ${slotIndex})"
-             ondragleave="builder.handleDragLeave(event)"></div>
-      `;
-    }
 
     braceletStrip.innerHTML = html;
 
     // Update add to cart button
     const addToCartBtn = document.getElementById('addToCartBtn');
     if (addToCartBtn) {
-      const hasItems = this.selectedBracelet && this.selectedCharms.length > 0;
+      const hasItems = this.selectedBracelet && activeCharms > 0;
       addToCartBtn.disabled = !hasItems;
       addToCartBtn.style.opacity = hasItems ? '1' : '0.5';
     }
   }
 
   removeCharmAtIndex(index) {
-    if (index >= 0 && index < this.selectedCharms.length) {
+    if (index >= 0 && index < this.maxCharms && this.selectedCharms[index] !== null) {
       const removedCharm = this.selectedCharms[index];
-      this.selectedCharms.splice(index, 1);
+      this.selectedCharms[index] = null;
       this.updatePreview();
       this.showToast(`${removedCharm.title} removido`, 'success');
     }
@@ -388,10 +398,12 @@ class BraceletBuilder {
   }
 
   handleCharmDragStart(event, index) {
+    if (this.selectedCharms[index] === null) return; // Can't drag empty slot
+    
     event.dataTransfer.effectAllowed = 'move';
     event.dataTransfer.setData('application/json', JSON.stringify({
       type: 'existing-charm',
-      index: index
+      sourceIndex: index
     }));
     event.target.style.opacity = '0.5';
   }
@@ -432,14 +444,15 @@ class BraceletBuilder {
       const data = JSON.parse(event.dataTransfer.getData('application/json'));
       
       if (data.type === 'new-charm') {
-        // Adding new charm from library
+        // Adding new charm from library to EXACT position
         if (!this.selectedBracelet) {
           this.showToast('¡Por favor selecciona una pulsera primero!', 'error');
           return;
         }
 
-        if (this.selectedCharms.length >= this.maxCharms) {
-          this.showToast('¡Máximo de dijes alcanzado!', 'error');
+        // Check if target slot is occupied
+        if (this.selectedCharms[targetIndex] !== null) {
+          this.showToast('Esta posición ya está ocupada. Arrastra a una casilla vacía.', 'error');
           return;
         }
 
@@ -448,48 +461,36 @@ class BraceletBuilder {
           uniqueId: Date.now() + Math.random()
         };
 
-        // Insert at exact target position
-        // If target is beyond current charms, fill gaps with the charm at that position
-        if (targetIndex >= 0 && targetIndex <= this.maxCharms) {
-          // Insert at the specific slot
-          if (targetIndex <= this.selectedCharms.length) {
-            // Insert between existing charms or at the end
-            this.selectedCharms.splice(targetIndex, 0, newCharm);
-          } else {
-            // Target is an empty slot beyond current charms - just add at the end
-            // (we don't want gaps in the array)
-            this.selectedCharms.push(newCharm);
-          }
-        } else {
-          this.selectedCharms.push(newCharm);
-        }
+        // Place charm at EXACT target position
+        this.selectedCharms[targetIndex] = newCharm;
 
         this.updatePreview();
-        this.showToast(`¡${newCharm.title} agregado en posición ${Math.min(targetIndex + 1, this.selectedCharms.length)}!`, 'success');
+        this.showToast(`¡${newCharm.title} agregado en posición ${targetIndex + 1}!`, 'success');
         
       } else if (data.type === 'existing-charm') {
-        // Reordering existing charm
-        const sourceIndex = data.index;
+        // Moving existing charm to EXACT position
+        const sourceIndex = data.sourceIndex;
         
-        if (sourceIndex !== targetIndex) {
-          // Remove from source position
-          const [movedCharm] = this.selectedCharms.splice(sourceIndex, 1);
-          
-          // Calculate adjusted target index
-          // If we're moving right, target index decreases by 1 after removal
-          let adjustedTarget = targetIndex;
-          if (sourceIndex < targetIndex) {
-            adjustedTarget = Math.min(targetIndex - 1, this.selectedCharms.length);
-          } else {
-            adjustedTarget = Math.min(targetIndex, this.selectedCharms.length);
-          }
-          
-          // Insert at exact target position
-          this.selectedCharms.splice(adjustedTarget, 0, movedCharm);
-          
-          this.updatePreview();
-          this.showToast(`Dije movido a posición ${adjustedTarget + 1}`, 'success');
+        if (sourceIndex === targetIndex) {
+          // Same position, do nothing
+          return;
         }
+
+        const movedCharm = this.selectedCharms[sourceIndex];
+        
+        if (this.selectedCharms[targetIndex] !== null) {
+          // Swap charms if target is occupied
+          this.selectedCharms[targetIndex] = movedCharm;
+          this.selectedCharms[sourceIndex] = null;
+          this.showToast(`Dije movido a posición ${targetIndex + 1}`, 'success');
+        } else {
+          // Move to empty slot
+          this.selectedCharms[targetIndex] = movedCharm;
+          this.selectedCharms[sourceIndex] = null;
+          this.showToast(`Dije movido a posición ${targetIndex + 1}`, 'success');
+        }
+        
+        this.updatePreview();
       }
     } catch (error) {
       console.error('Error en drag and drop:', error);
@@ -510,7 +511,10 @@ class BraceletBuilder {
       return;
     }
 
-    if (this.selectedCharms.length === 0) {
+    // Filter out null/empty slots
+    const activeCharms = this.selectedCharms.filter(charm => charm !== null);
+    
+    if (activeCharms.length === 0) {
       console.warn('No charms selected');
       this.showToast('¡Por favor agrega algunos dijes primero!', 'error');
       return;
@@ -531,7 +535,7 @@ class BraceletBuilder {
     try {
       console.log('=== STARTING ADD TO CART ===');
       console.log('Selected Bracelet:', this.selectedBracelet);
-      console.log('Selected Charms:', this.selectedCharms);
+      console.log('Active Charms:', activeCharms);
 
       // Add items one by one (more reliable than batch add)
       const itemsToAdd = [];
@@ -542,24 +546,26 @@ class BraceletBuilder {
         quantity: 1,
         properties: {
           '_Custom Bracelet': 'Yes',
-          '_Charms Count': this.selectedCharms.length.toString()
+          '_Charms Count': activeCharms.length.toString()
         }
       };
       itemsToAdd.push(braceletItem);
       console.log('Bracelet item:', braceletItem);
       
-      // Add each charm
+      // Add each charm with its actual position
       this.selectedCharms.forEach((charm, index) => {
-        const charmItem = {
-          id: String(charm.variantId),
-          quantity: 1,
-          properties: {
-            '_Part of Custom Bracelet': this.selectedBracelet.title,
-            '_Position': (index + 1).toString()
-          }
-        };
-        itemsToAdd.push(charmItem);
-        console.log(`Charm ${index + 1} item:`, charmItem);
+        if (charm !== null) {
+          const charmItem = {
+            id: String(charm.variantId),
+            quantity: 1,
+            properties: {
+              '_Part of Custom Bracelet': this.selectedBracelet.title,
+              '_Position': (index + 1).toString() // Use actual slot position
+            }
+          };
+          itemsToAdd.push(charmItem);
+          console.log(`Charm at position ${index + 1}:`, charmItem);
+        }
       });
 
       console.log('All items to add:', itemsToAdd);
