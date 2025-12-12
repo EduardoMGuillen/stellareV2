@@ -13,18 +13,22 @@
 }
 
 .builder-header h1 {
-  font-size: 3rem;
+  font-size: 3.5rem;
   color: #1B4332;
   margin-bottom: 0.5rem;
-  font-weight: 300;
-  letter-spacing: -1px;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-weight: 600;
+  font-style: italic;
+  letter-spacing: 1px;
   text-shadow: 2px 2px 4px rgba(212, 175, 55, 0.2);
 }
 
 .builder-header p {
   font-size: 1.2rem;
   color: #666;
-  font-weight: 300;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-weight: 400;
+  font-style: italic;
 }
 
 .builder-container {

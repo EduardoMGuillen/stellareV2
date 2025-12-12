@@ -32,13 +32,65 @@
 
   .cart-item {
     display: grid;
-    grid-template-columns: 120px 1fr auto;
+    grid-template-columns: 120px 1fr auto auto;
     gap: 2rem;
     padding: 2rem;
     background: white;
     border-radius: 15px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
     margin-bottom: 1rem;
+    position: relative;
+  }
+
+  .remove-item-btn {
+    background: {{ settings.color_accent }};
+    color: white;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    transition: all 0.3s ease;
+    align-self: center;
+  }
+
+  .remove-item-btn:hover {
+    background: #6B4226;
+    transform: scale(1.1);
+  }
+
+  .quantity-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+  }
+
+  .quantity-btn {
+    background: {{ settings.color_primary }};
+    color: {{ settings.color_secondary }};
+    border: 1px solid {{ settings.color_secondary }};
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+  }
+
+  .quantity-btn:hover {
+    background: {{ settings.color_forest_medium | default: '#2D6A4F' }};
+    transform: scale(1.1);
+  }
+
+  .quantity-display {
+    min-width: 40px;
+    text-align: center;
+    font-weight: 600;
   }
 
   .cart-item-image {
@@ -134,20 +186,27 @@
   {% else %}
     <div class="cart-items">
       {% for item in cart.items %}
-        <div class="cart-item">
+        <div class="cart-item" data-line="{{ forloop.index }}">
           <img src="{{ item.image | img_url: '200x' }}" alt="{{ item.title }}" class="cart-item-image">
           <div class="cart-item-details">
             <h3>{{ item.title }}</h3>
-            <p>Cantidad: {{ item.quantity }}</p>
+            <div class="quantity-controls">
+              <button class="quantity-btn" onclick="updateQuantity({{ forloop.index }}, {{ item.quantity | minus: 1 }})">-</button>
+              <span class="quantity-display">{{ item.quantity }}</span>
+              <button class="quantity-btn" onclick="updateQuantity({{ forloop.index }}, {{ item.quantity | plus: 1 }})">+</button>
+            </div>
             {% if item.properties %}
               {% for property in item.properties %}
-                <p><strong>{{ property.first }}:</strong> {{ property.last }}</p>
+                <p style="font-size: 0.9rem; color: #666; margin-top: 0.5rem;"><strong>{{ property.first }}:</strong> {{ property.last }}</p>
               {% endfor %}
             {% endif %}
           </div>
           <div class="cart-item-price">
             L {{ item.line_price | money_without_currency }}
           </div>
+          <button class="remove-item-btn" onclick="removeFromCart({{ forloop.index }})" title="Eliminar item">
+            ×
+          </button>
         </div>
       {% endfor %}
     </div>
@@ -164,4 +223,64 @@
     </div>
   {% endif %}
 </div>
+
+<script>
+  // Remove item from cart
+  async function removeFromCart(line) {
+    try {
+      const response = await fetch('/cart/change.js', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          line: line,
+          quantity: 0
+        })
+      });
+
+      if (response.ok) {
+        // Reload page to update cart
+        window.location.reload();
+      } else {
+        alert('Error al eliminar el producto. Por favor intenta de nuevo.');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Error al eliminar el producto. Por favor intenta de nuevo.');
+    }
+  }
+
+  // Update item quantity
+  async function updateQuantity(line, quantity) {
+    if (quantity < 1) {
+      if (confirm('¿Deseas eliminar este producto del carrito?')) {
+        removeFromCart(line);
+      }
+      return;
+    }
+
+    try {
+      const response = await fetch('/cart/change.js', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          line: line,
+          quantity: quantity
+        })
+      });
+
+      if (response.ok) {
+        window.location.reload();
+      } else {
+        alert('Error al actualizar la cantidad. Por favor intenta de nuevo.');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Error al actualizar la cantidad. Por favor intenta de nuevo.');
+    }
+  }
+</script>
 

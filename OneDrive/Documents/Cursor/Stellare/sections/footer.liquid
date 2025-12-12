@@ -1,9 +1,10 @@
 {% style %}
   .site-footer {
-    background: linear-gradient(135deg, {{ settings.color_primary }} 0%, {{ settings.color_accent }} 100%);
-    color: white;
+    background: linear-gradient(135deg, #8B5E34 0%, #A0724A 50%, #8B5E34 100%);
+    color: #FDFDF8;
     padding: 3rem 0 1rem;
     margin-top: 4rem;
+    border-top: 3px solid #D4AF37;
   }
 
   .footer-container {
@@ -20,9 +21,11 @@
   }
 
   .footer-section h3 {
-    color: {{ settings.color_secondary }};
+    color: #D4AF37;
     margin-bottom: 1rem;
-    font-size: 1.2rem;
+    font-size: 1.3rem;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic;
   }
 
   .footer-section ul {
@@ -36,13 +39,14 @@
   }
 
   .footer-section a {
-    color: white;
+    color: #F5F1E8;
     text-decoration: none;
     transition: color 0.3s ease;
   }
 
   .footer-section a:hover {
-    color: {{ settings.color_secondary }};
+    color: #D4AF37;
+    text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
   }
 
   .footer-social {
@@ -63,15 +67,17 @@
   }
 
   .footer-social a:hover {
-    background: {{ settings.color_secondary }};
+    background: #D4AF37;
     transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
   }
 
   .footer-bottom {
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    border-top: 1px solid rgba(212, 175, 55, 0.3);
     padding-top: 1.5rem;
     text-align: center;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
+    color: #FAF6E8;
   }
 
   @media (max-width: 768px) {
@@ -135,7 +141,7 @@
         <p>¡Suscríbete para nuevos diseños y ofertas exclusivas!</p>
         {% form 'customer' %}
           <input type="email" name="contact[email]" placeholder="Tu correo electrónico" style="padding: 0.75rem; border-radius: 25px; border: none; width: 100%; margin-top: 0.5rem;">
-          <button type="submit" style="background: {{ settings.color_secondary }}; color: {{ settings.color_primary }}; padding: 0.75rem 2rem; border: none; border-radius: 25px; font-weight: bold; margin-top: 0.5rem; cursor: pointer; width: 100%;">Suscribirse</button>
+          <button type="submit" style="background: #D4AF37; color: #1B4332; padding: 0.75rem 2rem; border: 2px solid #1B4332; border-radius: 25px; font-weight: bold; margin-top: 0.5rem; cursor: pointer; width: 100%; transition: all 0.3s ease;">Suscribirse</button>
         {% endform %}
       </div>
     </div>
