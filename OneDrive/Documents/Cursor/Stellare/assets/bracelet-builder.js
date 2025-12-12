@@ -448,30 +448,47 @@ class BraceletBuilder {
           uniqueId: Date.now() + Math.random()
         };
 
-        // Insert at target position
-        if (targetIndex <= this.selectedCharms.length) {
-          this.selectedCharms.splice(targetIndex, 0, newCharm);
+        // Insert at exact target position
+        // If target is beyond current charms, fill gaps with the charm at that position
+        if (targetIndex >= 0 && targetIndex <= this.maxCharms) {
+          // Insert at the specific slot
+          if (targetIndex <= this.selectedCharms.length) {
+            // Insert between existing charms or at the end
+            this.selectedCharms.splice(targetIndex, 0, newCharm);
+          } else {
+            // Target is an empty slot beyond current charms - just add at the end
+            // (we don't want gaps in the array)
+            this.selectedCharms.push(newCharm);
+          }
         } else {
           this.selectedCharms.push(newCharm);
         }
 
         this.updatePreview();
-        this.showToast(`¡${newCharm.title} agregado!`, 'success');
+        this.showToast(`¡${newCharm.title} agregado en posición ${Math.min(targetIndex + 1, this.selectedCharms.length)}!`, 'success');
         
       } else if (data.type === 'existing-charm') {
         // Reordering existing charm
         const sourceIndex = data.index;
         
-        if (sourceIndex !== targetIndex && targetIndex < this.selectedCharms.length) {
-          // Remove from source
+        if (sourceIndex !== targetIndex) {
+          // Remove from source position
           const [movedCharm] = this.selectedCharms.splice(sourceIndex, 1);
           
-          // Insert at target
-          const adjustedTarget = sourceIndex < targetIndex ? targetIndex - 1 : targetIndex;
+          // Calculate adjusted target index
+          // If we're moving right, target index decreases by 1 after removal
+          let adjustedTarget = targetIndex;
+          if (sourceIndex < targetIndex) {
+            adjustedTarget = Math.min(targetIndex - 1, this.selectedCharms.length);
+          } else {
+            adjustedTarget = Math.min(targetIndex, this.selectedCharms.length);
+          }
+          
+          // Insert at exact target position
           this.selectedCharms.splice(adjustedTarget, 0, movedCharm);
           
           this.updatePreview();
-          this.showToast('Dije reordenado', 'success');
+          this.showToast(`Dije movido a posición ${adjustedTarget + 1}`, 'success');
         }
       }
     } catch (error) {
