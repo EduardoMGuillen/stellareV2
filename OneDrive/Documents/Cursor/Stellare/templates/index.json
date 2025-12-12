@@ -4,9 +4,31 @@
     "hero-banner": {
       "type": "hero-banner",
       "settings": {
-        "title": "Crea la Pulsera de Tus Sueños",
-        "subtitle": "Diseña tu pulsera italiana única con nuestro constructor interactivo ⭐",
-        "button_text": "Comienza Ahora"
+        "title": "✨ Colección Navideña 2024 ✨",
+        "subtitle": "Diseña tu pulsera italiana única con nuestro constructor interactivo - El regalo perfecto para esta temporada",
+        "button_text": "Crea Tu Pulsera"
+      }
+    },
+    "elegant-story": {
+      "type": "elegant-story",
+      "settings": {
+        "story_label": "Nuestra Esencia",
+        "story_title": "Cada Charm Cuenta una <span class='highlight'>Historia</span>",
+        "story_quote": "Más que joyas, creamos recuerdos que brillan para siempre",
+        "feature_1_icon": "✨",
+        "feature_1_title": "Diseño Italiano",
+        "feature_1_text": "Cada charm está diseñado con la elegancia y sofisticación italiana.",
+        "feature_2_icon": "💎",
+        "feature_2_title": "Calidad Premium",
+        "feature_2_text": "Materiales de alta calidad que perduran generación tras generación.",
+        "feature_3_icon": "🎁",
+        "feature_3_title": "Personalización",
+        "feature_3_text": "Crea tu pulsera única seleccionando los charms que cuentan tu historia.",
+        "feature_4_icon": "⭐",
+        "feature_4_title": "Momentos Especiales",
+        "feature_4_text": "Ideal para celebrar cumpleaños, aniversarios y momentos inolvidables.",
+        "button_text": "Crea Tu Pulsera",
+        "button_link": "/pages/builder"
       }
     },
     "featured-products": {
@@ -20,6 +42,7 @@
   },
   "order": [
     "hero-banner",
+    "elegant-story",
     "featured-products"
   ]
 }

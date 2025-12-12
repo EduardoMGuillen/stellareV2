@@ -1,14 +1,17 @@
 :root {
-  --color-primary: #E91E8C;
-  --color-secondary: #FFD700;
-  --color-accent: #FF1493;
-  --color-text: #2c2c2c;
-  --color-text-light: #666666;
-  --color-background: #FFFFFF;
-  --color-light-pink: #FFF5F9;
-  --color-light-gold: #FFFBF0;
-  --color-light-gray: #f8f8f8;
-  --color-border: #e0e0e0;
+  /* Christmas Theme - Elegant Forest & Gold */
+  --color-primary: #1B4332;        /* Dark Forest Green */
+  --color-secondary: #D4AF37;      /* Rich Gold */
+  --color-accent: #8B5E34;         /* Warm Ochre */
+  --color-text: #2c2c2c;           /* Dark Charcoal */
+  --color-text-light: #5a5a5a;     /* Medium Gray */
+  --color-background: #FDFDF8;     /* Soft Cream White */
+  --color-light-cream: #F5F1E8;    /* Light Beige */
+  --color-light-gold: #FAF6E8;     /* Pale Gold */
+  --color-light-gray: #F5F1E8;
+  --color-border: #D8CDB5;         /* Soft Gold Border */
+  --color-forest-medium: #2D6A4F;  /* Medium Green */
+  --color-gold-light: #E8D7A8;     /* Light Gold */
 }
 
 * {
@@ -74,14 +77,16 @@ button {
 
 .btn-primary {
   background: var(--color-primary);
-  color: white;
-  box-shadow: 0 4px 15px rgba(233, 30, 140, 0.2);
+  color: var(--color-secondary);
+  box-shadow: 0 4px 15px rgba(27, 67, 50, 0.25);
+  border: 2px solid var(--color-secondary);
 }
 
 .btn-primary:hover {
-  background: var(--color-accent);
+  background: var(--color-forest-medium);
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(233, 30, 140, 0.3);
+  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+  color: white;
 }
 
 .btn-secondary {
@@ -128,8 +133,8 @@ button {
 
 /* Loading Spinner */
 .spinner {
-  border: 3px solid rgba(233, 30, 140, 0.1);
-  border-top: 3px solid var(--color-primary);
+  border: 3px solid rgba(212, 175, 55, 0.2);
+  border-top: 3px solid var(--color-secondary);
   border-radius: 50%;
   width: 40px;
   height: 40px;
@@ -180,15 +185,15 @@ button {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--color-light-pink);
+  background: var(--color-light-gold);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--color-primary);
+  background: linear-gradient(180deg, var(--color-primary) 0%, var(--color-forest-medium) 100%);
   border-radius: 5px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-accent);
+  background: linear-gradient(180deg, var(--color-secondary) 0%, var(--color-accent) 100%);
 }
 

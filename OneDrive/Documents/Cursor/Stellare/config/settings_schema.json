@@ -21,23 +21,23 @@
       {
         "type": "color",
         "id": "color_primary",
-        "label": "Color Primario (Rosa)",
-        "default": "#E91E8C",
-        "info": "Color principal para botones y acentos"
+        "label": "Color Primario (Verde Bosque)",
+        "default": "#1B4332",
+        "info": "Color principal para botones y acentos - Tema Navidad"
       },
       {
         "type": "color",
         "id": "color_secondary",
         "label": "Color Secundario (Dorado)",
-        "default": "#FFD700",
-        "info": "Color para elementos destacados"
+        "default": "#D4AF37",
+        "info": "Color para elementos destacados - Dorado elegante"
       },
       {
         "type": "color",
         "id": "color_accent",
-        "label": "Color de Acento",
-        "default": "#FF1493",
-        "info": "Color para efectos hover y énfasis"
+        "label": "Color de Acento (Ocre)",
+        "default": "#8B5E34",
+        "info": "Color para efectos hover y énfasis - Ocre cálido"
       },
       {
         "type": "color",
@@ -50,22 +50,22 @@
         "type": "color",
         "id": "color_text_light",
         "label": "Color de Texto Claro",
-        "default": "#666666",
+        "default": "#5a5a5a",
         "info": "Color para texto secundario"
       },
       {
         "type": "color",
         "id": "color_background",
-        "label": "Color de Fondo",
-        "default": "#FFFFFF",
-        "info": "Color de fondo principal del sitio"
+        "label": "Color de Fondo (Crema)",
+        "default": "#FDFDF8",
+        "info": "Color de fondo principal - Blanco crema suave"
       },
       {
         "type": "color",
         "id": "color_light_gray",
-        "label": "Color Gris Claro",
-        "default": "#f8f8f8",
-        "info": "Color para secciones de fondo"
+        "label": "Color Beige Claro",
+        "default": "#F5F1E8",
+        "info": "Color para secciones de fondo - Beige elegante"
       }
     ]
   },

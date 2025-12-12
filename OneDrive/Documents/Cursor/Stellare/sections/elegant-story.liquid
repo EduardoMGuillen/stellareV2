@@ -1,0 +1,544 @@
+{% comment %}
+  Elegant Story Section - Christmas Theme
+  A beautiful section with image and text for storytelling
+{% endcomment %}
+
+<style>
+.elegant-story {
+  padding: 6rem 0;
+  background: linear-gradient(135deg, #F5F1E8 0%, #FDFDF8 50%, #FAF6E8 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.elegant-story::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, #D4AF37 50%, transparent 100%);
+}
+
+.elegant-story::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, #D4AF37 50%, transparent 100%);
+}
+
+.story-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.story-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5rem;
+  align-items: center;
+}
+
+.story-image-wrapper {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 
+    0 20px 60px rgba(27, 67, 50, 0.15),
+    0 0 40px rgba(212, 175, 55, 0.1);
+}
+
+.story-image-wrapper::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 3px solid #D4AF37;
+  border-radius: 20px;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  z-index: 2;
+}
+
+.story-image-wrapper:hover::before {
+  opacity: 1;
+}
+
+.story-image {
+  width: 100%;
+  height: 600px;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.7s ease;
+}
+
+.story-image-wrapper:hover .story-image {
+  transform: scale(1.05);
+}
+
+.story-image-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(to top, rgba(27, 67, 50, 0.8) 0%, transparent 100%);
+  z-index: 1;
+}
+
+.story-content {
+  padding: 2rem 0;
+}
+
+.story-label {
+  display: inline-block;
+  padding: 0.5rem 1.5rem;
+  background: linear-gradient(135deg, #1B4332 0%, #2D6A4F 100%);
+  color: #D4AF37;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  border-radius: 50px;
+  margin-bottom: 1.5rem;
+  border: 1px solid #D4AF37;
+}
+
+.story-title {
+  font-size: 3.5rem;
+  font-weight: 300;
+  color: #1B4332;
+  margin-bottom: 1.5rem;
+  line-height: 1.1;
+  letter-spacing: -1px;
+  text-shadow: 2px 2px 4px rgba(212, 175, 55, 0.1);
+}
+
+.story-title .highlight {
+  color: #D4AF37;
+  font-weight: 400;
+  font-style: italic;
+}
+
+.story-text {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #5a5a5a;
+  margin-bottom: 1.5rem;
+  font-weight: 300;
+}
+
+.story-text strong {
+  color: #1B4332;
+  font-weight: 500;
+}
+
+.story-quote {
+  border-left: 4px solid #D4AF37;
+  padding-left: 2rem;
+  margin: 2rem 0;
+  font-style: italic;
+  font-size: 1.2rem;
+  color: #8B5E34;
+  font-weight: 300;
+}
+
+.story-features {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  margin-top: 2.5rem;
+}
+
+.story-feature {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.feature-icon {
+  flex-shrink: 0;
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, #1B4332 0%, #2D6A4F 100%);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: #D4AF37;
+  box-shadow: 0 4px 15px rgba(27, 67, 50, 0.2);
+  border: 1px solid #D4AF37;
+}
+
+.feature-content h4 {
+  font-size: 1.1rem;
+  color: #1B4332;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.feature-content p {
+  font-size: 0.95rem;
+  color: #5a5a5a;
+  line-height: 1.5;
+  font-weight: 300;
+}
+
+.story-cta {
+  margin-top: 3rem;
+}
+
+.story-btn {
+  display: inline-block;
+  padding: 1rem 3rem;
+  background: linear-gradient(135deg, #1B4332 0%, #2D6A4F 100%);
+  color: #D4AF37;
+  border: 2px solid #D4AF37;
+  border-radius: 50px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 0.95rem;
+  transition: all 0.4s ease;
+  box-shadow: 0 4px 20px rgba(27, 67, 50, 0.2);
+}
+
+.story-btn:hover {
+  background: linear-gradient(135deg, #2D6A4F 0%, #1B4332 100%);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(212, 175, 55, 0.4);
+  color: white;
+}
+
+/* Decorative elements */
+.story-decoration {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.story-decoration.top-right {
+  top: 10%;
+  right: 5%;
+}
+
+.story-decoration.bottom-left {
+  bottom: 15%;
+  left: 5%;
+}
+
+/* Mobile Responsive */
+@media (max-width: 1024px) {
+  .story-grid {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+
+  .story-title {
+    font-size: 2.5rem;
+  }
+
+  .story-image {
+    height: 450px;
+  }
+
+  .story-features {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .elegant-story {
+    padding: 4rem 0;
+  }
+
+  .story-container {
+    padding: 0 1rem;
+  }
+
+  .story-title {
+    font-size: 2rem;
+  }
+
+  .story-text {
+    font-size: 1rem;
+  }
+
+  .story-quote {
+    font-size: 1rem;
+    padding-left: 1rem;
+  }
+
+  .story-image {
+    height: 350px;
+  }
+
+  .story-cta {
+    text-align: center;
+  }
+}
+</style>
+
+<section class="elegant-story">
+  <!-- Decorative Elements -->
+  <div class="story-decoration top-right"></div>
+  <div class="story-decoration bottom-left"></div>
+
+  <div class="story-container">
+    <div class="story-grid">
+      
+      <!-- Image Side -->
+      <div class="story-image-wrapper">
+        {% if section.settings.story_image %}
+          <img 
+            src="{{ section.settings.story_image | img_url: '1000x' }}" 
+            alt="{{ section.settings.story_title | escape }}"
+            class="story-image"
+            loading="lazy"
+          >
+        {% else %}
+          <img 
+            src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600'%3E%3Crect fill='%23F5F1E8' width='800' height='600'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' font-size='60' fill='%231B4332'%3E✨ Stellare ✨%3C/text%3E%3C/svg%3E" 
+            alt="Stellare"
+            class="story-image"
+          >
+        {% endif %}
+        <div class="story-image-overlay"></div>
+      </div>
+
+      <!-- Content Side -->
+      <div class="story-content">
+        {% if section.settings.story_label != blank %}
+          <span class="story-label">{{ section.settings.story_label }}</span>
+        {% endif %}
+
+        <h2 class="story-title">
+          {{ section.settings.story_title | default: 'Nuestra <span class="highlight">Historia</span>' }}
+        </h2>
+
+        {% if section.settings.story_description != blank %}
+          <div class="story-text">
+            {{ section.settings.story_description }}
+          </div>
+        {% endif %}
+
+        {% if section.settings.story_quote != blank %}
+          <blockquote class="story-quote">
+            "{{ section.settings.story_quote }}"
+          </blockquote>
+        {% endif %}
+
+        <!-- Features Grid -->
+        <div class="story-features">
+          {% if section.settings.feature_1_title != blank %}
+            <div class="story-feature">
+              <div class="feature-icon">{{ section.settings.feature_1_icon | default: '✨' }}</div>
+              <div class="feature-content">
+                <h4>{{ section.settings.feature_1_title }}</h4>
+                <p>{{ section.settings.feature_1_text }}</p>
+              </div>
+            </div>
+          {% endif %}
+
+          {% if section.settings.feature_2_title != blank %}
+            <div class="story-feature">
+              <div class="feature-icon">{{ section.settings.feature_2_icon | default: '💎' }}</div>
+              <div class="feature-content">
+                <h4>{{ section.settings.feature_2_title }}</h4>
+                <p>{{ section.settings.feature_2_text }}</p>
+              </div>
+            </div>
+          {% endif %}
+
+          {% if section.settings.feature_3_title != blank %}
+            <div class="story-feature">
+              <div class="feature-icon">{{ section.settings.feature_3_icon | default: '🎁' }}</div>
+              <div class="feature-content">
+                <h4>{{ section.settings.feature_3_title }}</h4>
+                <p>{{ section.settings.feature_3_text }}</p>
+              </div>
+            </div>
+          {% endif %}
+
+          {% if section.settings.feature_4_title != blank %}
+            <div class="story-feature">
+              <div class="feature-icon">{{ section.settings.feature_4_icon | default: '⭐' }}</div>
+              <div class="feature-content">
+                <h4>{{ section.settings.feature_4_title }}</h4>
+                <p>{{ section.settings.feature_4_text }}</p>
+              </div>
+            </div>
+          {% endif %}
+        </div>
+
+        {% if section.settings.button_text != blank %}
+          <div class="story-cta">
+            <a href="{{ section.settings.button_link | default: '/collections/all' }}" class="story-btn">
+              {{ section.settings.button_text }}
+            </a>
+          </div>
+        {% endif %}
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Historia Elegante",
+  "settings": [
+    {
+      "type": "text",
+      "id": "story_label",
+      "label": "Etiqueta superior",
+      "default": "Nuestra Esencia"
+    },
+    {
+      "type": "text",
+      "id": "story_title",
+      "label": "Título",
+      "default": "Cada Charm Cuenta una <span class='highlight'>Historia</span>"
+    },
+    {
+      "type": "richtext",
+      "id": "story_description",
+      "label": "Descripción",
+      "default": "<p>En Stellare, creemos que cada pulsera es única, como la persona que la lleva. Nuestros charms italianos capturan momentos especiales, sueños y recuerdos, creando joyas que son verdaderamente personales.</p><p><strong>Diseño elegante</strong> con la <strong>calidad italiana</strong> que perdura en el tiempo.</p>"
+    },
+    {
+      "type": "text",
+      "id": "story_quote",
+      "label": "Cita destacada",
+      "default": "Más que joyas, creamos recuerdos que brillan para siempre"
+    },
+    {
+      "type": "image_picker",
+      "id": "story_image",
+      "label": "Imagen principal"
+    },
+    {
+      "type": "header",
+      "content": "Característica 1"
+    },
+    {
+      "type": "text",
+      "id": "feature_1_icon",
+      "label": "Ícono 1",
+      "default": "✨"
+    },
+    {
+      "type": "text",
+      "id": "feature_1_title",
+      "label": "Título 1",
+      "default": "Diseño Italiano"
+    },
+    {
+      "type": "text",
+      "id": "feature_1_text",
+      "label": "Texto 1",
+      "default": "Cada charm está diseñado con la elegancia y sofisticación italiana."
+    },
+    {
+      "type": "header",
+      "content": "Característica 2"
+    },
+    {
+      "type": "text",
+      "id": "feature_2_icon",
+      "label": "Ícono 2",
+      "default": "💎"
+    },
+    {
+      "type": "text",
+      "id": "feature_2_title",
+      "label": "Título 2",
+      "default": "Calidad Premium"
+    },
+    {
+      "type": "text",
+      "id": "feature_2_text",
+      "label": "Texto 2",
+      "default": "Materiales de alta calidad que perduran generación tras generación."
+    },
+    {
+      "type": "header",
+      "content": "Característica 3"
+    },
+    {
+      "type": "text",
+      "id": "feature_3_icon",
+      "label": "Ícono 3",
+      "default": "🎁"
+    },
+    {
+      "type": "text",
+      "id": "feature_3_title",
+      "label": "Título 3",
+      "default": "Personalización"
+    },
+    {
+      "type": "text",
+      "id": "feature_3_text",
+      "label": "Texto 3",
+      "default": "Crea tu pulsera única seleccionando los charms que cuentan tu historia."
+    },
+    {
+      "type": "header",
+      "content": "Característica 4"
+    },
+    {
+      "type": "text",
+      "id": "feature_4_icon",
+      "label": "Ícono 4",
+      "default": "⭐"
+    },
+    {
+      "type": "text",
+      "id": "feature_4_title",
+      "label": "Título 4",
+      "default": "Momentos Especiales"
+    },
+    {
+      "type": "text",
+      "id": "feature_4_text",
+      "label": "Texto 4",
+      "default": "Ideal para celebrar cumpleaños, aniversarios y momentos inolvidables."
+    },
+    {
+      "type": "header",
+      "content": "Botón de acción"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Texto del botón",
+      "default": "Crea Tu Pulsera"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Enlace del botón",
+      "default": "/pages/builder"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Historia Elegante",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}
+
