@@ -2,16 +2,8 @@
 // General theme functionality
 
 document.addEventListener('DOMContentLoaded', function() {
-  // Mobile menu toggle
-  const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
-  const mainNav = document.getElementById('mainNav');
+  // Mobile menu is handled in header.liquid to avoid conflicts
   
-  if (mobileMenuToggle && mainNav) {
-    mobileMenuToggle.addEventListener('click', function() {
-      mainNav.classList.toggle('active');
-    });
-  }
-
   // Add to cart functionality
   setupCartFunctionality();
   

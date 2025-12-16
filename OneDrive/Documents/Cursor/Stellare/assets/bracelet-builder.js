@@ -101,24 +101,55 @@ class BraceletBuilder {
   async loadBracelets() {
     try {
       console.log('Loading bracelets from /collections/pulseras/products.json');
-      const response = await fetch('/collections/pulseras/products.json');
+      let allProducts = [];
+      let page = 1;
+      let hasMore = true;
       
-      if (!response.ok) {
-        console.error('Response not OK:', response.status, response.statusText);
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      // Load all pages of products (Shopify limits to 50 per page)
+      while (hasMore) {
+        const url = `/collections/pulseras/products.json?page=${page}`;
+        console.log(`Loading page ${page}: ${url}`);
+        const response = await fetch(url);
+        
+        if (!response.ok) {
+          if (page === 1) {
+            console.error('Response not OK:', response.status, response.statusText);
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+          } else {
+            // If it's not the first page, we've reached the end
+            hasMore = false;
+            break;
+          }
+        }
+        
+        const data = await response.json();
+        console.log(`Page ${page} data received:`, data.products?.length || 0, 'products');
+        
+        if (!data.products || data.products.length === 0) {
+          hasMore = false;
+          break;
+        }
+        
+        allProducts = allProducts.concat(data.products);
+        
+        // If we got less than 50 products, we've reached the last page
+        if (data.products.length < 50) {
+          hasMore = false;
+        } else {
+          page++;
+        }
       }
       
-      const data = await response.json();
-      console.log('Bracelets data received:', data);
+      console.log('Total bracelets fetched:', allProducts.length);
       
-      if (!data.products || data.products.length === 0) {
+      if (allProducts.length === 0) {
         console.warn('No products found in Pulseras collection');
         this.bracelets = [];
         return;
       }
       
       // Filter only published products (allow out of stock items as they can be ordered)
-      this.bracelets = data.products
+      this.bracelets = allProducts
         .filter(product => {
           // Check if product is published (ignore stock availability)
           const hasVariant = product.variants && product.variants.length > 0;
@@ -151,24 +182,55 @@ class BraceletBuilder {
   async loadCharms() {
     try {
       console.log('Loading charms from /collections/colgantes-y-dijes/products.json');
-      const response = await fetch('/collections/colgantes-y-dijes/products.json');
+      let allProducts = [];
+      let page = 1;
+      let hasMore = true;
       
-      if (!response.ok) {
-        console.error('Response not OK:', response.status, response.statusText);
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      // Load all pages of products (Shopify limits to 50 per page)
+      while (hasMore) {
+        const url = `/collections/colgantes-y-dijes/products.json?page=${page}`;
+        console.log(`Loading page ${page}: ${url}`);
+        const response = await fetch(url);
+        
+        if (!response.ok) {
+          if (page === 1) {
+            console.error('Response not OK:', response.status, response.statusText);
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+          } else {
+            // If it's not the first page, we've reached the end
+            hasMore = false;
+            break;
+          }
+        }
+        
+        const data = await response.json();
+        console.log(`Page ${page} data received:`, data.products?.length || 0, 'products');
+        
+        if (!data.products || data.products.length === 0) {
+          hasMore = false;
+          break;
+        }
+        
+        allProducts = allProducts.concat(data.products);
+        
+        // If we got less than 50 products, we've reached the last page
+        if (data.products.length < 50) {
+          hasMore = false;
+        } else {
+          page++;
+        }
       }
       
-      const data = await response.json();
-      console.log('Charms data received:', data);
+      console.log('Total charms fetched:', allProducts.length);
       
-      if (!data.products || data.products.length === 0) {
+      if (allProducts.length === 0) {
         console.warn('No products found in Colgantes y dijes collection');
         this.charms = [];
         return;
       }
       
       // Filter only published products (allow out of stock items as they can be ordered)
-      this.charms = data.products
+      this.charms = allProducts
         .filter(product => {
           // Check if product is published (ignore stock availability)
           const hasVariant = product.variants && product.variants.length > 0;
