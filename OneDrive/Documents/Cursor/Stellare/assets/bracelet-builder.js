@@ -3,13 +3,17 @@
 
 class BraceletBuilder {
   constructor() {
-    this.maxCharms = 18;
+    this.maxCharms = 16; // Default size
     this.selectedCharms = new Array(this.maxCharms).fill(null); // Fixed size array with positions
     this.selectedBracelet = null;
     this.charms = []; // Products from "Colgantes y dijes" collection
     this.bracelets = []; // Products from "Pulseras" collection
     this.currentFilter = 'all';
     this.isLoading = true;
+    this.touchStartX = null;
+    this.touchStartY = null;
+    this.draggedElement = null;
+    this.isDragging = false;
     
     this.init();
   }
@@ -18,9 +22,12 @@ class BraceletBuilder {
     // Get settings from Shopify
     const maxCharmsElement = document.getElementById('maxCharms');
     if (maxCharmsElement) {
-      this.maxCharms = parseInt(maxCharmsElement.textContent) || 18;
+      this.maxCharms = parseInt(maxCharmsElement.textContent) || 16;
       this.selectedCharms = new Array(this.maxCharms).fill(null); // Reinitialize with correct size
     }
+
+    // Setup bracelet size selector
+    this.setupBraceletSizeSelector();
 
     // Show loading state
     this.showLoading();
@@ -36,6 +43,59 @@ class BraceletBuilder {
     
     // Show bracelet selection first
     this.showBraceletSelection();
+  }
+
+  setupBraceletSizeSelector() {
+    const sizeSelector = document.getElementById('braceletSize');
+    if (sizeSelector) {
+      // Set initial value to match current maxCharms
+      const maxCharmsElement = document.getElementById('maxCharms');
+      if (maxCharmsElement) {
+        const initialSize = parseInt(maxCharmsElement.textContent) || 16;
+        sizeSelector.value = initialSize;
+        this.maxCharms = initialSize;
+        this.selectedCharms = new Array(this.maxCharms).fill(null);
+      }
+      
+      sizeSelector.addEventListener('change', (e) => {
+        const newSize = parseInt(e.target.value);
+        if (newSize !== this.maxCharms) {
+          // Confirm if there are charms already placed
+          const hasCharms = this.selectedCharms.some(slot => slot !== null);
+          if (hasCharms) {
+            if (!confirm(`¿Cambiar el tamaño de la pulsera? Esto eliminará los dijes ya colocados.`)) {
+              e.target.value = this.maxCharms;
+              return;
+            }
+          }
+          
+          // Adjust array size
+          if (newSize > this.maxCharms) {
+            // Increase size - add null slots
+            this.selectedCharms = [...this.selectedCharms, ...new Array(newSize - this.maxCharms).fill(null)];
+          } else {
+            // Decrease size - remove excess charms
+            const excessCharms = this.selectedCharms.slice(newSize);
+            const removedCount = excessCharms.filter(c => c !== null).length;
+            this.selectedCharms = this.selectedCharms.slice(0, newSize);
+            if (removedCount > 0) {
+              this.showToast(`${removedCount} dije(s) removido(s)`, 'success');
+            }
+          }
+          
+          this.maxCharms = newSize;
+          
+          // Update maxCharms display
+          const maxCharmsElement = document.getElementById('maxCharms');
+          if (maxCharmsElement) {
+            maxCharmsElement.textContent = newSize;
+          }
+          
+          this.updatePreview();
+          this.showToast(`Tamaño de pulsera cambiado a ${newSize} dijes`, 'success');
+        }
+      });
+    }
   }
 
   async loadBracelets() {
@@ -239,18 +299,17 @@ class BraceletBuilder {
       return;
     }
 
-    let filteredCharms = this.charms;
-    if (filter !== 'all') {
-      filteredCharms = this.charms.filter(charm => 
-        charm.tags.some(tag => tag.toLowerCase().includes(filter.toLowerCase()))
-      );
-    }
+    // Show all charms without filtering by sections
+    const filteredCharms = this.charms;
 
     charmsGrid.innerHTML = filteredCharms.map(charm => `
       <div class="charm-item" 
            data-charm-id="${charm.id}" 
            draggable="true"
            ondragstart="builder.handleDragStart(event, ${charm.id})"
+           ontouchstart="builder.handleTouchStart(event, ${charm.id})"
+           ontouchmove="builder.handleTouchMove(event)"
+           ontouchend="builder.handleTouchEnd(event)"
            onclick="builder.addCharm(${charm.id})">
         <img src="${charm.image}" alt="${charm.title}" class="charm-image">
         <div class="charm-name">${charm.title}</div>
@@ -260,19 +319,15 @@ class BraceletBuilder {
   }
 
   setupFilters() {
-    const filterButtons = document.querySelectorAll('.filter-btn');
-    filterButtons.forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        filterButtons.forEach(b => b.classList.remove('active'));
-        e.target.classList.add('active');
-        const category = e.target.getAttribute('data-category');
-        this.currentFilter = category;
-        this.renderCharms(category);
-      });
-    });
+    // Filters removed - showing all charms without sections
   }
 
   addCharm(charmId) {
+    // Don't add if we're in the middle of a drag operation
+    if (this.isDragging) {
+      return;
+    }
+    
     if (!this.selectedBracelet) {
       this.showToast('¡Por favor selecciona una pulsera primero!', 'error');
       return;
@@ -348,7 +403,10 @@ class BraceletBuilder {
                ondrop="builder.handleDrop(event, ${index})"
                ondragleave="builder.handleDragLeave(event)"
                draggable="true"
-               ondragstart="builder.handleCharmDragStart(event, ${index})">
+               ondragstart="builder.handleCharmDragStart(event, ${index})"
+               ontouchstart="builder.handleSlotTouchStart(event, ${index})"
+               ontouchmove="builder.handleSlotTouchMove(event)"
+               ontouchend="builder.handleSlotTouchEnd(event, ${index})">
             <img src="${charm.image}" alt="${charm.title}">
             <span class="remove-charm-btn" onclick="event.stopPropagation(); builder.removeCharmAtIndex(${index})">×</span>
           </div>
@@ -359,7 +417,10 @@ class BraceletBuilder {
           <div class="link-slot empty" data-index="${index}"
                ondragover="builder.handleDragOver(event)"
                ondrop="builder.handleDrop(event, ${index})"
-               ondragleave="builder.handleDragLeave(event)"></div>
+               ondragleave="builder.handleDragLeave(event)"
+               ontouchstart="builder.handleSlotTouchStart(event, ${index})"
+               ontouchmove="builder.handleSlotTouchMove(event)"
+               ontouchend="builder.handleSlotTouchEnd(event, ${index})"></div>
         `;
       }
     });
@@ -502,6 +563,160 @@ class BraceletBuilder {
     });
   }
 
+  // Touch event handlers for mobile drag and drop
+  handleTouchStart(event, charmId) {
+    if (!this.selectedBracelet) {
+      this.showToast('¡Por favor selecciona una pulsera primero!', 'error');
+      return;
+    }
+    
+    const touch = event.touches[0];
+    this.touchStartX = touch.clientX;
+    this.touchStartY = touch.clientY;
+    this.draggedElement = { type: 'new-charm', charmId: charmId };
+    const charmItem = event.target.closest('.charm-item');
+    if (charmItem) {
+      charmItem.style.opacity = '0.5';
+      charmItem.style.transform = 'scale(0.95)';
+    }
+  }
+
+  handleTouchMove(event) {
+    if (!this.draggedElement) return;
+    // Only prevent default if we're actually dragging (moved more than 10px)
+    const touch = event.touches[0];
+    const deltaX = Math.abs(touch.clientX - this.touchStartX);
+    const deltaY = Math.abs(touch.clientY - this.touchStartY);
+    if (deltaX > 10 || deltaY > 10) {
+      this.isDragging = true;
+      event.preventDefault();
+    }
+  }
+
+  handleTouchEnd(event) {
+    if (!this.draggedElement) return;
+    
+    const touch = event.changedTouches[0];
+    const deltaX = Math.abs(touch.clientX - this.touchStartX);
+    const deltaY = Math.abs(touch.clientY - this.touchStartY);
+    
+    // Only process if moved significantly (more than 10px)
+    if (deltaX > 10 || deltaY > 10) {
+      const elementBelow = document.elementFromPoint(touch.clientX, touch.clientY);
+      
+      // Find the closest slot
+      let targetSlot = elementBelow;
+      while (targetSlot && !targetSlot.classList.contains('link-slot')) {
+        targetSlot = targetSlot.parentElement;
+      }
+      
+      if (targetSlot && targetSlot.dataset.index !== undefined) {
+        const targetIndex = parseInt(targetSlot.dataset.index);
+        
+        if (this.draggedElement.type === 'new-charm') {
+          const charm = this.charms.find(c => c.id === this.draggedElement.charmId);
+          if (charm) {
+            if (this.selectedCharms[targetIndex] === null) {
+              this.selectedCharms[targetIndex] = {
+                ...charm,
+                uniqueId: Date.now() + Math.random()
+              };
+              this.updatePreview();
+              this.showToast(`¡${charm.title} agregado en posición ${targetIndex + 1}!`, 'success');
+            } else {
+              this.showToast('Esta posición ya está ocupada. Arrastra a una casilla vacía.', 'error');
+            }
+          }
+        }
+      }
+    }
+    
+    // Reset
+    document.querySelectorAll('.charm-item').forEach(el => {
+      el.style.opacity = '';
+      el.style.transform = '';
+    });
+    this.draggedElement = null;
+    this.touchStartX = null;
+    this.touchStartY = null;
+  }
+
+  handleSlotTouchStart(event, index) {
+    if (this.selectedCharms[index] === null) return;
+    const touch = event.touches[0];
+    this.touchStartX = touch.clientX;
+    this.touchStartY = touch.clientY;
+    this.draggedElement = { type: 'existing-charm', sourceIndex: index };
+    event.currentTarget.style.opacity = '0.5';
+    event.currentTarget.style.transform = 'scale(0.95)';
+  }
+
+  handleSlotTouchMove(event) {
+    if (!this.draggedElement || this.draggedElement.type !== 'existing-charm') return;
+    // Only prevent default if we're actually dragging
+    const touch = event.touches[0];
+    const deltaX = Math.abs(touch.clientX - this.touchStartX);
+    const deltaY = Math.abs(touch.clientY - this.touchStartY);
+    if (deltaX > 10 || deltaY > 10) {
+      event.preventDefault();
+    }
+  }
+
+  handleSlotTouchEnd(event, index) {
+    if (!this.draggedElement || this.draggedElement.type !== 'existing-charm') return;
+    
+    const touch = event.changedTouches[0];
+    const deltaX = Math.abs(touch.clientX - this.touchStartX);
+    const deltaY = Math.abs(touch.clientY - this.touchStartY);
+    
+    // Only process if moved significantly (more than 10px)
+    if (deltaX > 10 || deltaY > 10) {
+      const elementBelow = document.elementFromPoint(touch.clientX, touch.clientY);
+      
+      // Find the closest slot
+      let targetSlot = elementBelow;
+      while (targetSlot && !targetSlot.classList.contains('link-slot')) {
+        targetSlot = targetSlot.parentElement;
+      }
+      
+      if (targetSlot && targetSlot.dataset.index !== undefined) {
+        const targetIndex = parseInt(targetSlot.dataset.index);
+        const sourceIndex = this.draggedElement.sourceIndex;
+        
+        if (sourceIndex !== targetIndex) {
+          const movedCharm = this.selectedCharms[sourceIndex];
+          if (this.selectedCharms[targetIndex] === null) {
+            this.selectedCharms[targetIndex] = movedCharm;
+            this.selectedCharms[sourceIndex] = null;
+            this.updatePreview();
+            this.showToast(`Dije movido a posición ${targetIndex + 1}`, 'success');
+          } else {
+            // Swap
+            const temp = this.selectedCharms[targetIndex];
+            this.selectedCharms[targetIndex] = movedCharm;
+            this.selectedCharms[sourceIndex] = temp;
+            this.updatePreview();
+            this.showToast(`Dijes intercambiados`, 'success');
+          }
+        }
+      }
+    }
+    
+    // Reset
+    document.querySelectorAll('.link-slot').forEach(el => {
+      el.style.opacity = '';
+      el.style.transform = '';
+    });
+    this.draggedElement = null;
+    this.touchStartX = null;
+    this.touchStartY = null;
+    
+    // Reset dragging flag after a short delay
+    setTimeout(() => {
+      this.isDragging = false;
+    }, 100);
+  }
+
   async addToCart() {
     console.log('🛒 addToCart() called');
     
@@ -546,7 +761,8 @@ class BraceletBuilder {
         quantity: 1,
         properties: {
           '_Custom Bracelet': 'Yes',
-          '_Charms Count': activeCharms.length.toString()
+          '_Charms Count': activeCharms.length.toString(),
+          '_Bracelet Size': this.maxCharms.toString()
         }
       };
       itemsToAdd.push(braceletItem);

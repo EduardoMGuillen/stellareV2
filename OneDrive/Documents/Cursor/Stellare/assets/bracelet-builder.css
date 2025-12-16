@@ -176,17 +176,27 @@
   }
 
   .charms-grid {
-    grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
-    gap: 1rem;
-    padding: 0.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 1.25rem;
+    padding: 0.75rem;
   }
 
   .charm-item {
-    padding: 0.5rem 0.25rem 0.25rem;
+    padding: 0.75rem 0.5rem 0.5rem;
+    min-height: 120px;
+  }
+
+  .charm-image {
+    width: 100%;
+    height: 70%;
+    object-fit: contain;
+    margin-bottom: 0.5rem;
   }
 
   .charm-name {
     font-size: 0.7rem;
+    line-height: 1.3;
+    margin-bottom: 0.25rem;
   }
 
   .charm-price {
@@ -711,6 +721,43 @@ button:disabled {
   cursor: not-allowed;
 }
 
+/* Bracelet Size Selector */
+.bracelet-size-selector {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.bracelet-size-selector label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #1B4332;
+  font-size: 1.1rem;
+}
+
+.bracelet-size-selector select {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  border: 2px solid #D8CDB5;
+  border-radius: 8px;
+  background: white;
+  color: #1B4332;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Poppins', sans-serif;
+}
+
+.bracelet-size-selector select:hover {
+  border-color: #D4AF37;
+  box-shadow: 0 2px 8px rgba(212, 175, 55, 0.2);
+}
+
+.bracelet-size-selector select:focus {
+  outline: none;
+  border-color: #D4AF37;
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2);
+}
+
 /* Mobile optimizations */
 @media (max-width: 768px) {
   .builder-header h1 {
@@ -729,13 +776,19 @@ button:disabled {
     padding: 1.5rem;
   }
 
-  .charms-filters {
-    justify-content: center;
+  .bracelet-size-selector {
+    margin-bottom: 1.5rem;
   }
 
-  .filter-btn {
-    padding: 0.4rem 1rem;
+  .bracelet-size-selector label {
+    font-size: 1rem;
+  }
+
+  .bracelet-size-selector select {
+    padding: 0.6rem 1.2rem;
     font-size: 0.9rem;
+    width: 100%;
+    max-width: 300px;
   }
 }
 

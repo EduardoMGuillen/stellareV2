@@ -108,14 +108,17 @@
   @media (max-width: 768px) {
     .site-nav {
       display: none;
-      position: absolute;
-      top: 100%;
+      position: fixed;
+      top: 70px;
       left: 0;
       right: 0;
       background: white;
       flex-direction: column;
       padding: 1rem;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      z-index: 1000;
+      max-height: calc(100vh - 70px);
+      overflow-y: auto;
     }
 
     .site-nav.active {
@@ -124,6 +127,11 @@
 
     .mobile-menu-toggle {
       display: block;
+      z-index: 1001;
+    }
+
+    .header-container {
+      position: relative;
     }
   }
 {% endstyle %}
@@ -178,8 +186,22 @@
 
 <script>
   function toggleMobileMenu() {
-    document.getElementById('mainNav').classList.toggle('active');
+    const nav = document.getElementById('mainNav');
+    if (nav) {
+      nav.classList.toggle('active');
+    }
   }
+  
+  // Close menu when clicking outside
+  document.addEventListener('click', function(event) {
+    const nav = document.getElementById('mainNav');
+    const toggle = document.querySelector('.mobile-menu-toggle');
+    if (nav && toggle && nav.classList.contains('active')) {
+      if (!nav.contains(event.target) && !toggle.contains(event.target)) {
+        nav.classList.remove('active');
+      }
+    }
+  });
 </script>
 
 {% schema %}
