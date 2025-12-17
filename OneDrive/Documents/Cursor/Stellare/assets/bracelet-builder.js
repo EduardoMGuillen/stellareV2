@@ -105,7 +105,7 @@ class BraceletBuilder {
       let page = 1;
       let hasMore = true;
       
-      // Load all pages of products (Shopify limits to 50 per page)
+      // Load all pages of products
       while (hasMore) {
         const url = `/collections/pulseras/products.json?page=${page}`;
         console.log(`Loading page ${page}: ${url}`);
@@ -131,13 +131,9 @@ class BraceletBuilder {
         }
         
         allProducts = allProducts.concat(data.products);
-        
-        // If we got less than 50 products, we've reached the last page
-        if (data.products.length < 50) {
-          hasMore = false;
-        } else {
-          page++;
-        }
+
+        // Go to next page; Shopify will eventually return an empty page or non-OK response
+        page++;
       }
       
       console.log('Total bracelets fetched:', allProducts.length);
@@ -186,7 +182,7 @@ class BraceletBuilder {
       let page = 1;
       let hasMore = true;
       
-      // Load all pages of products (Shopify limits to 50 per page)
+      // Load all pages of products
       while (hasMore) {
         const url = `/collections/colgantes-y-dijes/products.json?page=${page}`;
         console.log(`Loading page ${page}: ${url}`);
@@ -212,13 +208,9 @@ class BraceletBuilder {
         }
         
         allProducts = allProducts.concat(data.products);
-        
-        // If we got less than 50 products, we've reached the last page
-        if (data.products.length < 50) {
-          hasMore = false;
-        } else {
-          page++;
-        }
+
+        // Go to next page; Shopify will eventually return an empty page or non-OK response
+        page++;
       }
       
       console.log('Total charms fetched:', allProducts.length);

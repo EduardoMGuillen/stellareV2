@@ -117,54 +117,32 @@
     .site-header {
       z-index: 1000;
     }
-    
-    .site-nav {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(255, 255, 255, 0.98);
-      backdrop-filter: blur(10px);
+
+    .header-container {
       flex-direction: column;
-      padding: 4rem 1rem 1rem;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-      z-index: 1001;
-      max-height: 100vh;
-      overflow-y: auto;
-      margin: 0;
-      list-style: none;
+      align-items: flex-start;
+      gap: 0.75rem;
     }
 
-    .site-nav.active {
+    .site-nav {
       display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-top: 0.25rem;
     }
-    
+
     .site-nav li {
-      width: 100%;
-      border-bottom: 1px solid #f0f0f0;
+      border: none;
     }
-    
-    .site-nav li:last-child {
-      border-bottom: none;
-    }
-    
+
     .site-nav a {
-      display: block;
-      padding: 1rem;
-      font-size: 1.1rem;
-      width: 100%;
+      display: inline-block;
+      padding: 0.25rem 0;
+      font-size: 0.95rem;
     }
 
     .mobile-menu-toggle {
-      display: block;
-      z-index: 1002;
-    }
-
-    .header-container {
-      position: relative;
-      z-index: 1000;
+      display: none;
     }
   }
 {% endstyle %}
@@ -188,7 +166,6 @@
         <li><a href="/collections/all">Tienda</a></li>
         <li><a href="/collections/pulseras">Pulseras</a></li>
         <li><a href="/collections/colgantes-y-dijes">Dijes</a></li>
-        <li><a href="/pages/about">Acerca de</a></li>
       </ul>
     </nav>
 
@@ -216,87 +193,6 @@
     </div>
   </div>
 </header>
-
-<script>
-  // Ensure DOM is ready before setting up menu
-  (function() {
-    function initMobileMenu() {
-      const nav = document.getElementById('mainNav');
-      const toggle = document.getElementById('mobileMenuToggle');
-      
-      if (!nav || !toggle) {
-        // Retry if elements not ready yet
-        setTimeout(initMobileMenu, 100);
-        return;
-      }
-      
-      function toggleMobileMenu() {
-        console.log('Toggle menu clicked');
-        nav.classList.toggle('active');
-        // Prevent body scroll when menu is open
-        if (nav.classList.contains('active')) {
-          document.body.style.overflow = 'hidden';
-        } else {
-          document.body.style.overflow = '';
-        }
-      }
-      
-      // Use event listener instead of inline onclick
-      toggle.addEventListener('click', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        toggleMobileMenu();
-      });
-      
-      // Close menu when clicking on a link
-      const navLinks = nav.querySelectorAll('a');
-      navLinks.forEach(link => {
-        link.addEventListener('click', function() {
-          nav.classList.remove('active');
-          document.body.style.overflow = '';
-        });
-      });
-      
-      // Close menu when clicking outside
-      document.addEventListener('click', function(event) {
-        if (nav.classList.contains('active')) {
-          if (!nav.contains(event.target) && !toggle.contains(event.target)) {
-            nav.classList.remove('active');
-            document.body.style.overflow = '';
-          }
-        }
-      });
-      
-      // Close menu on escape key
-      document.addEventListener('keydown', function(event) {
-        if (event.key === 'Escape' && nav.classList.contains('active')) {
-          nav.classList.remove('active');
-          document.body.style.overflow = '';
-        }
-      });
-    }
-    
-    // Initialize when DOM is ready
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initMobileMenu);
-    } else {
-      initMobileMenu();
-    }
-    
-    // Also expose function globally for backwards compatibility
-    window.toggleMobileMenu = function() {
-      const nav = document.getElementById('mainNav');
-      if (nav) {
-        nav.classList.toggle('active');
-        if (nav.classList.contains('active')) {
-          document.body.style.overflow = 'hidden';
-        } else {
-          document.body.style.overflow = '';
-        }
-      }
-    };
-  })();
-</script>
 
 {% schema %}
 {

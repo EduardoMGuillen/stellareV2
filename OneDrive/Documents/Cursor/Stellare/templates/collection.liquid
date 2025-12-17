@@ -162,58 +162,60 @@
     {% endif %}
   </div>
 
-  <div class="collection-filters">
-    <div class="collection-count">
-      <strong>{{ collection.products_count }}</strong> productos
+  {% paginate collection.products by 250 %}
+    <div class="collection-filters">
+      <div class="collection-count">
+        <strong>{{ collection.products_count }}</strong> productos
+      </div>
+      <select class="sort-select" onchange="sortProducts(this.value)">
+        <option value="">Ordenar por</option>
+        <option value="price-asc">Precio: Menor a Mayor</option>
+        <option value="price-desc">Precio: Mayor a Menor</option>
+        <option value="title-asc">Nombre: A-Z</option>
+        <option value="title-desc">Nombre: Z-A</option>
+      </select>
     </div>
-    <select class="sort-select" onchange="sortProducts(this.value)">
-      <option value="">Ordenar por</option>
-      <option value="price-asc">Precio: Menor a Mayor</option>
-      <option value="price-desc">Precio: Mayor a Menor</option>
-      <option value="title-asc">Nombre: A-Z</option>
-      <option value="title-desc">Nombre: Z-A</option>
-    </select>
-  </div>
 
-  <div class="products-grid">
-    {% for product in collection.products %}
-      <a href="{{ product.url }}" class="product-card">
-        <div class="product-card-image">
-          {% if product.featured_image %}
-            <img src="{{ product.featured_image | img_url: '400x' }}" alt="{{ product.title }}" style="width: 100%; height: 100%; object-fit: cover;">
-          {% else %}
-            💎
-          {% endif %}
-        </div>
-          <div class="product-card-info">
-            <h3 class="product-card-title">{{ product.title }}</h3>
-            <p class="product-card-price">L {{ product.price | money_without_currency }}</p>
+    <div class="products-grid">
+      {% for product in collection.products %}
+        <a href="{{ product.url }}" class="product-card">
+          <div class="product-card-image">
+            {% if product.featured_image %}
+              <img src="{{ product.featured_image | img_url: '400x' }}" alt="{{ product.title }}" style="width: 100%; height: 100%; object-fit: cover;">
+            {% else %}
+              💎
+            {% endif %}
           </div>
-      </a>
-    {% else %}
-      <p>No hay productos en esta colección todavía.</p>
-    {% endfor %}
-  </div>
-
-  {% if paginate.pages > 1 %}
-    <div class="pagination">
-      {% if paginate.previous %}
-        <a href="{{ paginate.previous.url }}">←</a>
-      {% endif %}
-
-      {% for part in paginate.parts %}
-        {% if part.is_link %}
-          <a href="{{ part.url }}">{{ part.title }}</a>
-        {% else %}
-          <span class="active">{{ part.title }}</span>
-        {% endif %}
+            <div class="product-card-info">
+              <h3 class="product-card-title">{{ product.title }}</h3>
+              <p class="product-card-price">L {{ product.price | money_without_currency }}</p>
+            </div>
+        </a>
+      {% else %}
+        <p>No hay productos en esta colección todavía.</p>
       {% endfor %}
-
-      {% if paginate.next %}
-        <a href="{{ paginate.next.url }}">→</a>
-      {% endif %}
     </div>
-  {% endif %}
+
+    {% if paginate.pages > 1 %}
+      <div class="pagination">
+        {% if paginate.previous %}
+          <a href="{{ paginate.previous.url }}">←</a>
+        {% endif %}
+
+        {% for part in paginate.parts %}
+          {% if part.is_link %}
+            <a href="{{ part.url }}">{{ part.title }}</a>
+          {% else %}
+            <span class="active">{{ part.title }}</span>
+          {% endif %}
+        {% endfor %}
+
+        {% if paginate.next %}
+          <a href="{{ paginate.next.url }}">→</a>
+        {% endif %}
+      </div>
+    {% endif %}
+  {% endpaginate %}
 </div>
 
 <script>

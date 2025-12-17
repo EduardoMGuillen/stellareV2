@@ -79,8 +79,8 @@
 
   .cta-button {
     display: inline-block;
-    background: #E91E8C;
-    color: white;
+    background: {{ section.settings.button_color | default: '#E91E8C' }};
+    color: #ffffff;
     padding: 1.2rem 3.5rem;
     border-radius: 4px;
     text-decoration: none;
@@ -96,7 +96,7 @@
   .cta-button:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 30px rgba(233, 30, 140, 0.4);
-    background: #FF1493;
+    background: {{ section.settings.button_hover_color | default: '#FF1493' }};
   }
 
   @media (max-width: 768px) {
@@ -156,6 +156,18 @@
       "id": "button_text",
       "label": "Texto del Botón",
       "default": "Comienza Ahora"
+    },
+    {
+      "type": "color",
+      "id": "button_color",
+      "label": "Color de fondo del botón",
+      "default": "#E91E8C"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_color",
+      "label": "Color del botón al pasar el mouse",
+      "default": "#FF1493"
     }
   ],
   "presets": [
