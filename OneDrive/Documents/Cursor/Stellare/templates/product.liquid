@@ -150,7 +150,11 @@
   <div class="product-container">
     <div class="product-images">
       <div class="product-image-main">
-        {% if product.featured_image %}
+        {% comment %} Mostrar la imagen de la variante seleccionada, o la imagen principal del producto {% endcomment %}
+        {% assign current_variant = product.selected_or_first_available_variant %}
+        {% if current_variant.image %}
+          <img src="{{ current_variant.image | img_url: '800x' }}" alt="{{ product.title }}">
+        {% elsif product.featured_image %}
           <img src="{{ product.featured_image | img_url: '800x' }}" alt="{{ product.title }}">
         {% else %}
           💎
@@ -159,17 +163,45 @@
     </div>
 
     <div class="product-info">
-      <h1 class="product-title">{{ product.title }}</h1>
-      <div class="product-price">L {{ product.price | money_without_currency }}</div>
+      <h1 class="product-title">
+        {% comment %} Mostrar el título con la letra si hay una variante seleccionada con título específico {% endcomment %}
+        {% assign current_variant = product.selected_or_first_available_variant %}
+        {% if current_variant.title != 'Default Title' and current_variant.title != blank %}
+          {{ product.title }} - {{ current_variant.title }}
+        {% else %}
+          {{ product.title }}
+        {% endif %}
+      </h1>
+      <div class="product-price">L {{ current_variant.price | money_without_currency }}</div>
       
       <div class="product-description">
         {{ product.description }}
       </div>
 
       {% form 'product', product, id: 'add-to-cart-form' %}
-        <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+        <input type="hidden" name="id" id="variant-id" value="{{ product.selected_or_first_available_variant.id }}">
         
         <div class="product-form">
+          {% comment %} Selector de variantes si hay múltiples variantes {% endcomment %}
+          {% if product.variants.size > 1 %}
+            <div class="variant-selector" style="margin-bottom: 1.5rem;">
+              <label for="variant-select" style="display: block; margin-bottom: 0.5rem; font-weight: 600;"><strong>Selecciona la variante:</strong></label>
+              <select id="variant-select" name="id" style="width: 100%; padding: 0.75rem 1rem; border: 2px solid {{ settings.color_primary }}; border-radius: 25px; font-size: 1rem; font-weight: 600; color: {{ settings.color_primary }}; background: white; cursor: pointer;">
+                {% for variant in product.variants %}
+                  {% if variant.available %}
+                    <option value="{{ variant.id }}" {% if variant.id == product.selected_or_first_available_variant.id %}selected{% endif %} data-image="{% if variant.image %}{{ variant.image | img_url: '800x' }}{% elsif product.featured_image %}{{ product.featured_image | img_url: '800x' }}{% endif %}" data-title="{% if variant.title != 'Default Title' and variant.title != blank %}{{ product.title }} - {{ variant.title }}{% else %}{{ product.title }}{% endif %}" data-price="{{ variant.price | money_without_currency }}">
+                      {% if variant.title != 'Default Title' and variant.title != blank %}
+                        {{ variant.title }} - L {{ variant.price | money_without_currency }}
+                      {% else %}
+                        {{ product.title }} - L {{ variant.price | money_without_currency }}
+                      {% endif %}
+                    </option>
+                  {% endif %}
+                {% endfor %}
+              </select>
+            </div>
+          {% endif %}
+          
           <div class="quantity-selector">
             <label for="quantity"><strong>Cantidad:</strong></label>
             <div class="quantity-input">
@@ -204,6 +236,79 @@
       quantityInput.value = newValue;
     }
   }
+
+  // Almacenar información de todas las variantes
+  const variantData = {};
+  {% for variant in product.variants %}
+    {% if variant.available %}
+      variantData[{{ variant.id }}] = {
+        id: {{ variant.id }},
+        image: {% if variant.image %}'{{ variant.image | img_url: '800x' }}'{% elsif product.featured_image %}'{{ product.featured_image | img_url: '800x' }}'{% else %}null{% endif %},
+        title: {% if variant.title != 'Default Title' and variant.title != blank %}'{{ product.title }} - {{ variant.title }}'{% else %}'{{ product.title }}'{% endif %},
+        price: '{{ variant.price | money_without_currency }}'
+      };
+    {% endif %}
+  {% endfor %}
+
+  // Función para actualizar la UI con la variante seleccionada
+  function updateVariantUI(variantId) {
+    const variant = variantData[variantId];
+    if (!variant) {
+      console.warn('Variante no encontrada:', variantId);
+      return;
+    }
+    
+    // Actualizar el input hidden con el ID de la variante
+    const variantIdInput = document.getElementById('variant-id');
+    if (variantIdInput) {
+      variantIdInput.value = variant.id;
+    }
+    
+    // Actualizar la imagen
+    const productImage = document.querySelector('.product-image-main img');
+    if (productImage && variant.image) {
+      productImage.src = variant.image;
+      productImage.alt = variant.title;
+    }
+    
+    // Actualizar el título
+    const productTitle = document.querySelector('.product-title');
+    if (productTitle) {
+      productTitle.textContent = variant.title;
+    }
+    
+    // Actualizar el precio
+    const productPrice = document.querySelector('.product-price');
+    if (productPrice) {
+      productPrice.textContent = 'L ' + variant.price;
+    }
+    
+    // Actualizar el selector si existe
+    const variantSelect = document.getElementById('variant-select');
+    if (variantSelect) {
+      variantSelect.value = variant.id;
+    }
+  }
+
+  // Actualizar imagen y título cuando cambie la variante
+  document.addEventListener('DOMContentLoaded', function() {
+    // Verificar si hay un parámetro variant en la URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const variantParam = urlParams.get('variant');
+    
+    if (variantParam) {
+      // Actualizar UI con la variante de la URL
+      updateVariantUI(variantParam);
+    }
+    
+    // Escuchar cambios en el selector de variantes
+    const variantSelect = document.getElementById('variant-select');
+    if (variantSelect) {
+      variantSelect.addEventListener('change', function() {
+        updateVariantUI(this.value);
+      });
+    }
+  });
 
   // Handle add to cart form submission
   document.addEventListener('DOMContentLoaded', function() {

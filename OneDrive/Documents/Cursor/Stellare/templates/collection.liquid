@@ -178,19 +178,55 @@
 
     <div class="products-grid">
       {% for product in collection.products %}
-        <a href="{{ product.url }}" class="product-card">
-          <div class="product-card-image">
-            {% if product.featured_image %}
-              <img src="{{ product.featured_image | img_url: '400x' }}" alt="{{ product.title }}" style="width: 100%; height: 100%; object-fit: cover;">
-            {% else %}
-              💎
-            {% endif %}
-          </div>
+        {% unless product.available %}
+          {% continue %}
+        {% endunless %}
+        
+        {% comment %} Si el producto tiene múltiples variantes disponibles, mostrar cada variante como un producto separado {% endcomment %}
+        {% if product.variants.size > 1 %}
+          {% for variant in product.variants %}
+            {% unless variant.available %}
+              {% continue %}
+            {% endunless %}
+            <a href="{{ product.url }}?variant={{ variant.id }}" class="product-card">
+              <div class="product-card-image">
+                {% comment %} Usar la imagen específica de la variante, o la imagen principal del producto como fallback {% endcomment %}
+                {% if variant.image %}
+                  <img src="{{ variant.image | img_url: '400x' }}" alt="{{ variant.title }}" style="width: 100%; height: 100%; object-fit: cover;">
+                {% elsif product.featured_image %}
+                  <img src="{{ product.featured_image | img_url: '400x' }}" alt="{{ variant.title }}" style="width: 100%; height: 100%; object-fit: cover;">
+                {% else %}
+                  💎
+                {% endif %}
+              </div>
+              <div class="product-card-info">
+                <h3 class="product-card-title">
+                  {% if variant.title != 'Default Title' %}
+                    {{ product.title }} - {{ variant.title }}
+                  {% else %}
+                    {{ product.title }}
+                  {% endif %}
+                </h3>
+                <p class="product-card-price">L {{ variant.price | money_without_currency }}</p>
+              </div>
+            </a>
+          {% endfor %}
+        {% else %}
+          {% comment %} Si solo tiene una variante o no tiene variantes, mostrar el producto normal {% endcomment %}
+          <a href="{{ product.url }}" class="product-card">
+            <div class="product-card-image">
+              {% if product.featured_image %}
+                <img src="{{ product.featured_image | img_url: '400x' }}" alt="{{ product.title }}" style="width: 100%; height: 100%; object-fit: cover;">
+              {% else %}
+                💎
+              {% endif %}
+            </div>
             <div class="product-card-info">
               <h3 class="product-card-title">{{ product.title }}</h3>
               <p class="product-card-price">L {{ product.price | money_without_currency }}</p>
             </div>
-        </a>
+          </a>
+        {% endif %}
       {% else %}
         <p>No hay productos en esta colección todavía.</p>
       {% endfor %}

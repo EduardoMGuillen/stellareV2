@@ -46,8 +46,7 @@
 
   .product-image {
     width: 100%;
-    height: 140px;
-    object-fit: cover;
+    height: auto;
     background: linear-gradient(135deg, #FFE5F3 0%, #FFF8E1 100%);
     display: flex;
     align-items: center;
@@ -103,20 +102,65 @@
   <div class="products-grid">
     {% if section.settings.collection != blank %}
       {% assign collection = collections[section.settings.collection] %}
-      {% for product in collection.products limit: section.settings.products_to_show %}
-        <a href="{{ product.url }}" class="product-card">
-          <div class="product-image">
-            {% if product.featured_image %}
-              <img src="{{ product.featured_image | img_url: '400x' }}" alt="{{ product.title }}" style="width: 100%; height: 100%; object-fit: cover;">
-            {% else %}
-              💎
+      {% assign products_shown = 0 %}
+      {% for product in collection.products %}
+        {% unless product.available %}
+          {% continue %}
+        {% endunless %}
+        
+        {% comment %} Si el producto tiene múltiples variantes disponibles, mostrar cada variante como un producto separado {% endcomment %}
+        {% if product.variants.size > 1 %}
+          {% for variant in product.variants %}
+            {% unless variant.available %}
+              {% continue %}
+            {% endunless %}
+            {% if products_shown >= section.settings.products_to_show %}
+              {% break %}
             {% endif %}
-          </div>
-          <div class="product-info">
-            <h3 class="product-title">{{ product.title }}</h3>
-            <p class="product-price">L {{ product.price | money_without_currency }}</p>
-          </div>
-        </a>
+            <a href="{{ product.url }}?variant={{ variant.id }}" class="product-card">
+              <div class="product-image">
+                {% comment %} Usar la imagen específica de la variante, o la imagen principal del producto como fallback {% endcomment %}
+                {% if variant.image %}
+                  <img src="{{ variant.image | img_url: '400x' }}" alt="{{ variant.title }}" style="width: 100%; height: auto; object-fit: contain;">
+                {% elsif product.featured_image %}
+                  <img src="{{ product.featured_image | img_url: '400x' }}" alt="{{ variant.title }}" style="width: 100%; height: auto; object-fit: contain;">
+                {% else %}
+                  💎
+                {% endif %}
+              </div>
+              <div class="product-info">
+                <h3 class="product-title">
+                  {% if variant.title != 'Default Title' %}
+                    {{ product.title }} - {{ variant.title }}
+                  {% else %}
+                    {{ product.title }}
+                  {% endif %}
+                </h3>
+                <p class="product-price">L {{ variant.price | money_without_currency }}</p>
+              </div>
+            </a>
+            {% assign products_shown = products_shown | plus: 1 %}
+          {% endfor %}
+        {% else %}
+          {% comment %} Si solo tiene una variante o no tiene variantes, mostrar el producto normal {% endcomment %}
+          {% if products_shown >= section.settings.products_to_show %}
+            {% break %}
+          {% endif %}
+          <a href="{{ product.url }}" class="product-card">
+            <div class="product-image">
+              {% if product.featured_image %}
+                <img src="{{ product.featured_image | img_url: '400x' }}" alt="{{ product.title }}" style="width: 100%; height: auto; object-fit: contain;">
+              {% else %}
+                💎
+              {% endif %}
+            </div>
+            <div class="product-info">
+              <h3 class="product-title">{{ product.title }}</h3>
+              <p class="product-price">L {{ product.price | money_without_currency }}</p>
+            </div>
+          </a>
+          {% assign products_shown = products_shown | plus: 1 %}
+        {% endif %}
       {% endfor %}
     {% else %}
       {% comment %} Placeholder products {% endcomment %}
