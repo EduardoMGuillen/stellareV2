@@ -1,0 +1,420 @@
+{% layout 'theme' %}
+
+{% style %}
+  .sold-out-page {
+    max-width: 1400px;
+    margin: 2rem auto;
+    padding: 0 20px;
+  }
+
+  .sold-out-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    padding: 3rem 0;
+    background: linear-gradient(135deg, rgba(233, 30, 140, 0.1) 0%, rgba(255, 215, 0, 0.1) 100%);
+    border-radius: 20px;
+  }
+
+  .sold-out-title {
+    font-size: 3rem;
+    color: {{ settings.color_primary }};
+    font-weight: 800;
+    margin-bottom: 1rem;
+  }
+
+  .sold-out-message {
+    font-size: 1.3rem;
+    color: {{ settings.color_text }};
+    max-width: 800px;
+    margin: 0 auto 2rem;
+    line-height: 1.6;
+  }
+
+  .instagram-contact-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 2rem;
+    background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+    color: white;
+    text-decoration: none;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(188, 24, 136, 0.3);
+    margin-top: 1rem;
+  }
+
+  .instagram-contact-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(188, 24, 136, 0.4);
+  }
+
+  .instagram-icon {
+    width: 24px;
+    height: 24px;
+    fill: white;
+  }
+
+  .collection-filters {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .collection-count {
+    font-size: 1.1rem;
+    color: {{ settings.color_text }};
+  }
+
+  .sort-select {
+    padding: 0.75rem 1.5rem;
+    border: 2px solid {{ settings.color_primary }};
+    border-radius: 25px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: {{ settings.color_primary }};
+    background: white;
+    cursor: pointer;
+  }
+
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 1rem;
+    margin-bottom: 3rem;
+  }
+
+  .product-card {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(233, 30, 140, 0.1);
+    transition: all 0.3s ease;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+
+  .product-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 25px rgba(233, 30, 140, 0.2);
+  }
+
+  .product-card-image {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+    background: linear-gradient(135deg, #FFE5F3 0%, #FFF8E1 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+  }
+
+  .product-card-info {
+    padding: 0.75rem;
+  }
+
+  .product-card-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: {{ settings.color_text }};
+    margin-bottom: 0.25rem;
+    line-height: 1.2;
+  }
+
+  .product-card-price {
+    font-size: 1rem;
+    font-weight: bold;
+    color: {{ settings.color_primary }};
+  }
+
+  .sold-out-badge {
+    display: inline-block;
+    background: rgba(233, 30, 140, 0.1);
+    color: {{ settings.color_primary }};
+    padding: 0.25rem 0.5rem;
+    border-radius: 5px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-top: 0.25rem;
+  }
+
+  @media (max-width: 768px) {
+    .sold-out-title {
+      font-size: 2rem;
+    }
+
+    .sold-out-message {
+      font-size: 1.1rem;
+    }
+
+    .instagram-contact-btn {
+      padding: 0.875rem 1.5rem;
+      font-size: 1rem;
+    }
+
+    .instagram-icon {
+      width: 20px;
+      height: 20px;
+    }
+
+    .products-grid {
+      grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+      gap: 0.75rem;
+    }
+
+    .product-card-image {
+      height: 110px;
+    }
+
+    .product-card-info {
+      padding: 0.5rem;
+    }
+
+    .product-card-title {
+      font-size: 0.75rem;
+    }
+
+    .product-card-price {
+      font-size: 0.9rem;
+    }
+  }
+{% endstyle %}
+
+<div class="sold-out-page">
+  <div class="sold-out-header">
+    <h1 class="sold-out-title">Sold Out?</h1>
+    <p class="sold-out-message">
+      ¿No encuentras el producto que buscas? Puedes hacer pedido por encargo de los productos sold out. 
+      Contacta con nosotros y te ayudaremos a conseguir tu pulsera o charm favorito.
+    </p>
+    <a href="https://www.instagram.com/stellare_hn/" target="_blank" rel="noopener noreferrer" class="instagram-contact-btn">
+      <svg class="instagram-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+      </svg>
+      Contáctanos en Instagram
+    </a>
+  </div>
+
+  {% comment %} Obtener productos de todas las colecciones relevantes {% endcomment %}
+  {% assign all_collection = collections.all %}
+  {% assign pulseras_collection = collections.pulseras %}
+  {% assign charms_collection = collections.charms %}
+
+  <div class="collection-filters">
+    <div class="collection-count">
+      <strong id="soldOutCount">0</strong> productos sold out
+    </div>
+    <select class="sort-select" onchange="sortProducts(this.value)">
+      <option value="">Ordenar por</option>
+      <option value="price-asc">Precio: Menor a Mayor</option>
+      <option value="price-desc">Precio: Mayor a Menor</option>
+      <option value="title-asc">Nombre: A-Z</option>
+      <option value="title-desc">Nombre: Z-A</option>
+    </select>
+  </div>
+
+  <div class="products-grid" id="productsGrid">
+    {% comment %} Iterar sobre la colección All con paginación para obtener todos los productos {% endcomment %}
+    {% if all_collection %}
+      {% paginate all_collection.products by 250 %}
+        {% for product in all_collection.products %}
+          {% comment %} Verificar si el producto pertenece a Pulseras o Charms {% endcomment %}
+          {% assign is_relevant = false %}
+          {% for collection in product.collections %}
+            {% assign coll_handle = collection.handle | downcase %}
+            {% if coll_handle == 'pulseras' or coll_handle == 'charms' or coll_handle == 'pulsera' or coll_handle == 'charm' %}
+              {% assign is_relevant = true %}
+              {% break %}
+            {% endif %}
+          {% endfor %}
+
+          {% if is_relevant %}
+            {% comment %} Si el producto completo está sold out {% endcomment %}
+            {% unless product.available %}
+              {% if product.variants.size > 1 %}
+                {% comment %} Si tiene múltiples variantes, mostrar solo las sold out {% endcomment %}
+                {% for variant in product.variants %}
+                  {% unless variant.available %}
+                    <a href="{{ product.url }}?variant={{ variant.id }}" class="product-card" data-product-id="{{ product.id }}" data-variant-id="{{ variant.id }}">
+                      <div class="product-card-image">
+                        {% if variant.image %}
+                          <img src="{{ variant.image | img_url: '400x' }}" alt="{{ variant.title }}" style="width: 100%; height: 100%; object-fit: cover;">
+                        {% elsif product.featured_image %}
+                          <img src="{{ product.featured_image | img_url: '400x' }}" alt="{{ variant.title }}" style="width: 100%; height: 100%; object-fit: cover;">
+                        {% else %}
+                          💎
+                        {% endif %}
+                      </div>
+                      <div class="product-card-info">
+                        <h3 class="product-card-title">
+                          {% if variant.title != 'Default Title' %}
+                            {{ product.title }} - {{ variant.title }}
+                          {% else %}
+                            {{ product.title }}
+                          {% endif %}
+                        </h3>
+                        <p class="product-card-price">L {{ variant.price | money_without_currency }}</p>
+                        <span class="sold-out-badge">Sold Out</span>
+                      </div>
+                    </a>
+                  {% endunless %}
+                {% endfor %}
+              {% else %}
+                {% comment %} Si solo tiene una variante, mostrar el producto {% endcomment %}
+                <a href="{{ product.url }}" class="product-card" data-product-id="{{ product.id }}">
+                  <div class="product-card-image">
+                    {% if product.featured_image %}
+                      <img src="{{ product.featured_image | img_url: '400x' }}" alt="{{ product.title }}" style="width: 100%; height: 100%; object-fit: cover;">
+                    {% else %}
+                      💎
+                    {% endif %}
+                  </div>
+                  <div class="product-card-info">
+                    <h3 class="product-card-title">{{ product.title }}</h3>
+                    <p class="product-card-price">L {{ product.price | money_without_currency }}</p>
+                    <span class="sold-out-badge">Sold Out</span>
+                  </div>
+                </a>
+              {% endif %}
+            {% else %}
+              {% comment %} Si el producto está disponible pero tiene variantes sold out {% endcomment %}
+              {% if product.variants.size > 1 %}
+                {% for variant in product.variants %}
+                  {% unless variant.available %}
+                    <a href="{{ product.url }}?variant={{ variant.id }}" class="product-card" data-product-id="{{ product.id }}" data-variant-id="{{ variant.id }}">
+                      <div class="product-card-image">
+                        {% if variant.image %}
+                          <img src="{{ variant.image | img_url: '400x' }}" alt="{{ variant.title }}" style="width: 100%; height: 100%; object-fit: cover;">
+                        {% elsif product.featured_image %}
+                          <img src="{{ product.featured_image | img_url: '400x' }}" alt="{{ variant.title }}" style="width: 100%; height: 100%; object-fit: cover;">
+                        {% else %}
+                          💎
+                        {% endif %}
+                      </div>
+                      <div class="product-card-info">
+                        <h3 class="product-card-title">
+                          {% if variant.title != 'Default Title' %}
+                            {{ product.title }} - {{ variant.title }}
+                          {% else %}
+                            {{ product.title }}
+                          {% endif %}
+                        </h3>
+                        <p class="product-card-price">L {{ variant.price | money_without_currency }}</p>
+                        <span class="sold-out-badge">Sold Out</span>
+                      </div>
+                    </a>
+                  {% endunless %}
+                {% endfor %}
+              {% endif %}
+            {% endunless %}
+          {% endif %}
+        {% endfor %}
+
+        {% if paginate.pages > 1 %}
+          <div class="pagination" style="grid-column: 1 / -1; display: flex; justify-content: center; gap: 0.5rem; margin: 3rem 0;">
+            {% if paginate.previous %}
+              <a href="{{ paginate.previous.url }}" style="padding: 0.75rem 1.25rem; border: 2px solid {{ settings.color_primary }}; border-radius: 50%; text-decoration: none; color: {{ settings.color_primary }}; font-weight: 600;">←</a>
+            {% endif %}
+
+            {% for part in paginate.parts %}
+              {% if part.is_link %}
+                <a href="{{ part.url }}" style="padding: 0.75rem 1.25rem; border: 2px solid {{ settings.color_primary }}; border-radius: 50%; text-decoration: none; color: {{ settings.color_primary }}; font-weight: 600;">{{ part.title }}</a>
+              {% else %}
+                <span style="padding: 0.75rem 1.25rem; border: 2px solid {{ settings.color_primary }}; border-radius: 50%; background: {{ settings.color_primary }}; color: white; font-weight: 600;">{{ part.title }}</span>
+              {% endif %}
+            {% endfor %}
+
+            {% if paginate.next %}
+              <a href="{{ paginate.next.url }}" style="padding: 0.75rem 1.25rem; border: 2px solid {{ settings.color_primary }}; border-radius: 50%; text-decoration: none; color: {{ settings.color_primary }}; font-weight: 600;">→</a>
+            {% endif %}
+          </div>
+        {% endif %}
+      {% endpaginate %}
+    {% endif %}
+
+    {% comment %} Si no hay productos sold out {% endcomment %}
+    {% if sold_out_count == 0 %}
+      <script>
+        document.addEventListener('DOMContentLoaded', function() {
+          const grid = document.getElementById('productsGrid');
+          const cards = grid.querySelectorAll('.product-card');
+          if (cards.length === 0) {
+            const message = document.createElement('p');
+            message.style.cssText = 'grid-column: 1 / -1; text-align: center; padding: 3rem; color: {{ settings.color_text }};';
+            message.textContent = 'No hay productos sold out en este momento. ¡Todos nuestros productos están disponibles!';
+            grid.appendChild(message);
+          }
+        });
+      </script>
+    {% endif %}
+  </div>
+</div>
+
+<script>
+  // Eliminar duplicados y actualizar contador
+  document.addEventListener('DOMContentLoaded', function() {
+    const grid = document.getElementById('productsGrid');
+    const cards = grid.querySelectorAll('.product-card');
+    const seen = new Set();
+    const duplicates = [];
+    
+    // Identificar duplicados
+    cards.forEach(card => {
+      const productId = card.getAttribute('data-product-id');
+      const variantId = card.getAttribute('data-variant-id') || 'default';
+      const key = productId + '-' + variantId;
+      
+      if (seen.has(key)) {
+        duplicates.push(card);
+      } else {
+        seen.add(key);
+      }
+    });
+    
+    // Eliminar duplicados
+    duplicates.forEach(dup => dup.remove());
+    
+    // Actualizar contador
+    const finalCount = grid.querySelectorAll('.product-card').length;
+    const countElement = document.getElementById('soldOutCount');
+    if (countElement) {
+      countElement.textContent = finalCount;
+    }
+  });
+
+  function sortProducts(sortValue) {
+    if (!sortValue) return;
+    
+    const grid = document.getElementById('productsGrid');
+    const products = Array.from(grid.querySelectorAll('.product-card'));
+    
+    products.sort((a, b) => {
+      const aPrice = parseFloat(a.querySelector('.product-card-price').textContent.replace(/[^0-9.]/g, ''));
+      const bPrice = parseFloat(b.querySelector('.product-card-price').textContent.replace(/[^0-9.]/g, ''));
+      const aTitle = a.querySelector('.product-card-title').textContent.trim();
+      const bTitle = b.querySelector('.product-card-title').textContent.trim();
+      
+      switch(sortValue) {
+        case 'price-asc':
+          return aPrice - bPrice;
+        case 'price-desc':
+          return bPrice - aPrice;
+        case 'title-asc':
+          return aTitle.localeCompare(bTitle);
+        case 'title-desc':
+          return bTitle.localeCompare(aTitle);
+        default:
+          return 0;
+      }
+    });
+    
+    products.forEach(product => grid.appendChild(product));
+  }
+</script>
